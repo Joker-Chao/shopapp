@@ -12,26 +12,27 @@
 	import 'swiper/css/swiper.css'
 	
 	export default {
-	  components: {
-	    Swiper,
-	    SwiperSlide
-	  },
-	  data(){
-		return {
-		  swiperOptions: {
-			pagination: {
-			  el: '.swiper-pagination'
-			},
-			autoplay:true,
-			loop : true
-		  },
-		  swiperList: [
-			  'https://img.alicdn.com/imgextra/i1/22/O1CN01EnqAzo1C27JF8tsF5_!!22-0-luban.jpg',
-			  'https://gw.alicdn.com/imgextra/i2/45/O1CN01MyEDlt1CCePyZnYUk_!!45-0-lubanu.jpg',
-			  'https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg'
-		  ]
+		props:{
+			swiperList: Array
+		},
+		components: {
+			Swiper,
+			SwiperSlide
+		},
+		data(){
+			return {
+				swiperOptions: {
+					pagination: {
+						el: '.swiper-pagination'
+					},
+					autoplay:true,
+					loop : true,
+					lazy: {
+						loadPrevNext: true
+					}
+				}
+			}
 		}
-	  }
 	}
 </script>
 
