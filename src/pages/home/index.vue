@@ -2,19 +2,19 @@
 	<div>
 		<comment-header></comment-header>
 		<search-bar></search-bar>
-		<swiper :swiperList="swiperList"></swiper>
+		<home-swiper :swiperList="swiperList"></home-swiper>
 	</div>
 </template>
 
 <script>
 	import CommentHeader from '@/components/Header'
 	import SearchBar from '@/components/SearchBar'
-	import Swiper from './Swiper'
+	import HomeSwiper from './Swiper'
 	export default{
 		components:{
 			CommentHeader,
 			SearchBar,
-			Swiper
+			HomeSwiper
 		},
 		data(){
 			return{
@@ -30,11 +30,11 @@
 		},
 		methods:{
 			getSwiper(){
-				this.axios.get('api/swiper').then(res => {
+				this.axios.get('api/swiper?type=1').then(res => {
 					console.log(res);
-				}).then(rej => {
-					console.log(rej);
-				})
+				}).catch(() => {
+					console.log('promise catch err');
+				});
 			}
 		}
 	}

@@ -1,7 +1,8 @@
 <template>
-	 <swiper ref="mySwiper" :options="swiperOptions">
+	 <swiper ref="mySwiper" :options="swiperOptions" class="swiper-container">
 	    <swiper-slide v-for="item of swiperList" :key="item">
-			<img :src="item" alt="">
+			<img :data-src="item" alt="" class="swiper-lazy swiper-img">
+			<div class="swiper-lazy-preloader"></div>
 		</swiper-slide>
 	    <div class="swiper-pagination" slot="pagination"></div>
 	  </swiper>
