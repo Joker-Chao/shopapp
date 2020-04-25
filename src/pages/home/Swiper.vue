@@ -1,5 +1,5 @@
 <template>
-	 <swiper ref="mySwiper" :options="swiperOptions" class="swiper-container">
+	 <swiper :options="swiperOptions" class="swiper-container" v-if="show">
 	    <swiper-slide v-for="item of swiperList" :key="item">
 			<img :data-src="item" alt="" class="swiper-lazy swiper-img">
 			<div class="swiper-lazy-preloader"></div>
@@ -9,12 +9,17 @@
 </template>
 
 <script>
-	import { Swiper, SwiperSlide} from 'vue-awesome-swiper'
-	import 'swiper/css/swiper.css'
+	import { Swiper, SwiperSlide} from 'vue-awesome-swiper';
+	import 'swiper/css/swiper.css';
 	
 	export default {
 		props:{
 			swiperList: Array
+		},
+		computed: {
+			show() {
+				return !!this.swiperList.length;
+			}
 		},
 		components: {
 			Swiper,

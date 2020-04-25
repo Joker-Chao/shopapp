@@ -22,19 +22,23 @@
 	@import  "~@/assets/scss/global";
 	#search{
 	    width: 100%;
-	    height: 0.88rem;
-	    text-align: center;
+	    height: $search-h;
 	    background-color: $color-global;
+	    padding: .15rem .4rem;
 	    box-sizing: border-box;
-	    padding: 0 0.4rem;
+		text-align: center;
 	    overflow: hidden;
+		position: fixed;
+		left: 0;
+		top: $header-h;
+		z-index: 100;
 		.search-warp{
 		    width: 100%;
-		    height: 0.56rem;
-		    line-height: 0.56rem;
+		    height: 100%;
+		    line-height: 0.58rem;
 		    font-size: 0.26rem;
-		    background-color: #ffffff;
-		    border-radius: 0.28rem;
+		    background-color: $color-white;
+		    border-radius: 0.3rem;
 		    color: #b2b2b2;
 		}
 		.search-warp .search-icon{

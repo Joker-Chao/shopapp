@@ -1,40 +1,125 @@
 <template>
-	<div>
+	<div class="page" ref="page">
 		<comment-header></comment-header>
 		<search-bar></search-bar>
 		<home-swiper :swiperList="swiperList"></home-swiper>
+		<icon-nav :navList="navList"></icon-nav>
+		<recommend :recommendList="recommendList"></recommend>
+		<sales :salesList="salesList"></sales>
+		<new-goods :newGoodsList="newGoodsList"></new-goods>
+		<div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="scrollDistance">
+			<goods-list :goodsList="goodsList"></goods-list>
+		</div>
+		<comment-footer ref="footer"></comment-footer>
 	</div>
 </template>
 
-<script>
-	import CommentHeader from '@/components/Header'
-	import SearchBar from '@/components/SearchBar'
-	import HomeSwiper from './Swiper'
+<script>	
+	import infiniteScroll from 'vue-infinite-scroll';
+	import CommentHeader from '@/components/Header';
+	import SearchBar from '@/components/SearchBar';
+	import CommentFooter from '@/components/Footer';
+	import HomeSwiper from './Swiper';
+	import IconNav from './IconNav';
+	import Recommend from './Recommend';
+	import Sales from './Sales';
+	import NewGoods from './NewGoods';
+	import GoodsList from './GoodsList';
+	import { SessionStorage } from '@/utils/storage';
+	
 	export default{
+		directives:{infiniteScroll},
 		components:{
 			CommentHeader,
 			SearchBar,
-			HomeSwiper
+			HomeSwiper,
+			IconNav,
+			Recommend,
+			Sales,
+			NewGoods,
+			GoodsList,
+			CommentFooter
 		},
 		data(){
 			return{
-				swiperList: [
-				'https://img.alicdn.com/imgextra/i1/22/O1CN01EnqAzo1C27JF8tsF5_!!22-0-luban.jpg',
-				'https://gw.alicdn.com/imgextra/i2/45/O1CN01MyEDlt1CCePyZnYUk_!!45-0-lubanu.jpg',
-				'https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg'
-				]
+				swiperList: [],
+				navList: [],
+				recommendList: [],
+				salesList: [],
+				newGoodsList: [],
+				goodsList: [],
+				page: 1, //为你推荐的页码
+				count: 8,  //文你推荐每次获取的数量
+				totalPage: 0, //你推荐的总页数
+				busy: false,
+				scrollDistance: 0,
+				showLoading: false
 			}
 		},
-		mounted(){
-			this.getSwiper()
+		async mounted(){
+			const footerHeight = document.querySelector('.footer-container').offsetHeight;
+			this.$refs.page.style.paddingBottom = footerHeight +'px'
+			this.scrollDistance = footerHeight;
+			this.$showLoading();
+			await this.getSwiper();
+			await this.getIconNav();
+			await this.getRecommend();
+			await this.getSales();
+			await this.getNewGoods();
+			this.$hideLoading();
 		},
 		methods:{
-			getSwiper(){
-				this.axios.get('api/swiper?type=1').then(res => {
-					console.log(res);
-				}).catch(() => {
-					console.log('promise catch err');
+			async getSwiper(){
+				const swiper = SessionStorage.getItem('swiper');
+				if(swiper){
+					this.swiperList = swiper;
+				}else{
+					const res = await this.axios.get('api/swiper?type=1');
+					const swiperList = res.map(item => item.img);
+					this.swiperList = swiperList;
+					SessionStorage.setItem('swiper',swiperList);
+				}
+				
+			},
+			async getIconNav(){
+				const navList = SessionStorage.getItem('navList');
+				if(navList){
+					this.navList = navList;
+				}else{
+					const navList = await this.axios.get('api/navigate?type=1');
+					this.navList = navList;
+					SessionStorage.setItem('navList',navList);
+				}
+			},
+			async getRecommend(){
+				this.recommendList = await this.axios.get('api/goods/recommend?type=1');
+			},
+			async getSales(){
+				this.salesList = await this.axios.get('api/goods/sales?type=1');
+			},
+			async getNewGoods(){
+				this.newGoodsList = await this.axios.get('api/goods/new?type=1');
+			},
+			async getGoodsList(){
+				const {goods,total} = await this.axios.get('api/goods_list?type=1',{
+					params: {
+						page: this.page,
+						count: this.count
+					}
 				});
+				this.goodsList = this.goodsList.concat(goods);
+				if(this.page === 1){
+					this.totalPage = Math.ceil(total/this.count);
+				}
+				this.page++;
+				// console.log({goods,total});
+			},
+			async loadMore(){
+				this.busy = true;
+				if(this.page <= this.totalPage || this.totalPage === 0){
+					await this.getGoodsList();
+					this.busy = false;
+				}
 			}
 		}
 	}
@@ -42,4 +127,10 @@
 
 <style lang="scss" scoped>
 	@import  "~@/assets/scss/global";
+	.page{
+		width: 100%;
+		height: 100%;
+		background-color: $color-bg;
+		margin-top: $header-h + $search-h;
+	}
 </style>
