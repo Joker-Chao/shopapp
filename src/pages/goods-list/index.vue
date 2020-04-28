@@ -1,6 +1,6 @@
 <template>
 	<div class="page">
-		<common-header :title="cname || '商品列表'" :back="backUrl" :cart="true"></common-header>
+		<common-header :title="cname || '商品列表'" :back="backUrl" :cartIcon="true"></common-header>
 		<div class="sort-container border-bottom">
 			<div class="sort-item" :class="{active: sortField === 'goods_id'}" @click="sortGoodsList('goods_id')">
 				综合
@@ -81,7 +81,7 @@
 						return
 					}
 					const res = await this.axios.get('api/category/cid',{params:{name:this.cname}})
-					console.log(res)
+					// console.log(res)
 					if(res.parent){
 						this.pid = res.cat_id
 					}else{

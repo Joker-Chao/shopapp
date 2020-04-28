@@ -24,11 +24,38 @@
 		mixins:[filters],
 		methods:{
 			addToCart(goods){
-				if(Object.keys(goods).length === 0){
-					return
-				}
-				const cart = LocalStorage.getItem('cart') || []
-				console.log(cart)
+				this.$showModel({
+					content: '是否加入购物车',
+					btn: ['否','是'],
+					success: res => {
+						if(Object.keys(goods).length === 0){
+							return
+						}
+						if(res.confirm === true){
+							const cart = LocalStorage.getItem('cart') || []
+							const index = cart.findIndex(item => item.id === goods.id)
+							console.log(index)
+							if(index === -1){
+								const cartData = {
+									...goods,
+									selected: true,
+									buyNumber: 1
+								}
+								cart.push(cartData)
+							}else{
+								const selected = cart[index].selected
+								const buyNumber = cart[index].buyNumber
+								console.log('buyNumber',buyNumber)
+								cart[index] = {
+									...goods,
+									selected,
+									buyNumber: buyNumber + 1
+								}
+							}
+							LocalStorage.setItem('cart',cart)
+						}
+					}
+				})
 			}
 		}
 	}

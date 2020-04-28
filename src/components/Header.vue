@@ -2,7 +2,9 @@
 	<div id="header">
 		<span class="iconfont back" v-if="back" @click="toBack">&#xe62f;</span>
 		<h3>{{title}}</h3>
-		<span class="iconfont cart" v-if="cart" @click="toCart">&#xe60c;<!-- <i>2</i> --></span>
+		<span class="iconfont cart" v-if="cartIconBtn" @click="toCart">&#xe60c;</span>
+		<span class="cart manage" v-else-if="manageBtn" @click="toManage">管理</span>
+		<span class="cart manage" v-else-if="accomplishBtn" @click="toManage">完成</span>
 	</div>
 </template>
 
@@ -17,18 +19,30 @@
 				type: String,
 				default: ''
 			},
-			cart: {
+			cartIcon: {
 				type: Boolean,
 				default: false
+			},
+			manage: {
+				type: Boolean,
+				default: false
+			},
+			accomplish: {
+				type: Boolean,
+				default: false
+			}
+		},
+		data(){
+			return {
+				cartIconBtn: this.cartIcon,
+				manageBtn: this.manage,
+				accomplishBtn: this.accomplish
 			}
 		},
 		watch:{
 			back(){
 				return this.back !== ''
-			},
-			cart(){
-				return this.cart !== ''
-			}
+			}	
 		},
 		methods:{
 			toBack(){
@@ -38,12 +52,15 @@
 					this.$router.push(this.back)
 				}
 			},
-			toCart(res){
-				if(this.cart !== ''){
+			toCart(){
+				if(this.cartIcon !== ''){
 					this.$router.push('/cart')
-					this.cart = res
 				}
 				
+			},
+			toManage(){
+				this.manageBtn = this.accomplishBtn
+				this.accomplishBtn = !this.manageBtn
 			}
 		}
 	}
@@ -76,6 +93,7 @@
 		}
 	}
 	.cart{
+		height: 100%;
 		position: absolute;
 		top: 50%;
 		right: 0.35rem;
@@ -88,11 +106,16 @@
 			position: absolute;
 			top: 0.08rem;
 			right: -0.15rem;
-			background-color: #FFFFFF;
+			background-color: $color-white;
 			font-size: .2rem;
 			line-height: .3rem;
 			text-align: center;
-			color: #FF5E46;
+			color: $color-global;
+		}
+		&.manage{
+			font-size: 0.32rem;
+			color: $color-white;
 		}
 	}
+	
 </style>

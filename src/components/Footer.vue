@@ -7,11 +7,11 @@
 		<router-link tag="div" to="/category" class="footer-nav">
 			<span class="iconfont">&#xe62c;</span>
 			<span>分类</span>
-		</router-link>
-		<div class="footer-nav">
+		</router-link>                                     
+		<router-link tag="div" to="/cart" class="footer-nav">
 			<span class="iconfont">&#xe60c;</span>
 			<span>购物车</span>
-		</div>
+		</router-link>
 		<div class="footer-nav">
 			<span class="iconfont">&#xe6b1;</span>
 			<span>我的</span>
