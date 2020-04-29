@@ -1,6 +1,6 @@
 <template>
 	<div class="goods-list">
-		<div class="goods-item" v-for="item of goodsList" :key="item.id">
+		<div class="goods-item" v-for="(item,index) of goodsList" :key="index">
 			<div class="goods-img-warpper">
 				<img class="goods-img" :src="item.img" alt="">
 			</div>
@@ -34,7 +34,7 @@
 						if(res.confirm === true){
 							const cart = LocalStorage.getItem('cart') || []
 							const index = cart.findIndex(item => item.id === goods.id)
-							console.log(index)
+							// console.log(index)
 							if(index === -1){
 								const cartData = {
 									...goods,
@@ -45,7 +45,7 @@
 							}else{
 								const selected = cart[index].selected
 								const buyNumber = cart[index].buyNumber
-								console.log('buyNumber',buyNumber)
+								// console.log('buyNumber',buyNumber)
 								cart[index] = {
 									...goods,
 									selected,

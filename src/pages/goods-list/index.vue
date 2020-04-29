@@ -115,12 +115,14 @@
 				this.page++
 			},
 			async loadMore(){
+				this.$showLoading();
 				await this.getCidByCname()
 				this.busy = true
 				if(this.page <= this.totalPage || this.totalPage === 0){
 					await this.getGoodsList()
 					this.busy = false
 				}
+				this.$hideLoading();
 			}
 		}
 	}

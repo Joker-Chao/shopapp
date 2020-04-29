@@ -116,10 +116,12 @@
 			},
 			async loadMore(){
 				this.busy = true;
+				this.$showLoading();
 				if(this.page <= this.totalPage || this.totalPage === 0){
 					await this.getGoodsList();
 					this.busy = false;
 				}
+				this.$hideLoading();
 			}
 		}
 	}
