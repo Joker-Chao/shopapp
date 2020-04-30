@@ -2,14 +2,14 @@
 	<container title="精品推荐" morePath="/goods-list">
 		<template v-slot:content>
 			<div class="goods-list-container" ref="warpper">
-					<div class="goods-list" ref="recommend">
-					<div class="goods-item border" v-for="item of recommendList" :key="item.id">
+				<div class="goods-list" ref="recommend">
+					<router-link tag="div" to="`goods-detail/${item.id}`" class="goods-item border" v-for="item of recommendList" :key="item.id">
 						<img class="goods-img" v-lazy="item.img" alt="">
 						<div class="goods-info">
 							<div class="goods-name">{{item.name}}</div>
 							<div class="goods-price">￥{{item.price|formatPrice}}</div>
 						</div>
-					</div>
+					</router-link>
 				</div>
 			</div>
 		</template>

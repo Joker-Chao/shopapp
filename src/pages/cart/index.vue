@@ -1,24 +1,28 @@
 <template>
 	<div class="page">
 		<common-header :title="'购物车'" :back="backUrl" :manage="true"></common-header>
-		<ul class="cart-list">
-			<li v-for="item of cart" :key="item.id" @click="toGoodsDetail(item.id)" :class="{'del-move': item.delete}" class="cart-item" @touchstart="touchStart" :data-goods-id="item.id" @touchend="touchEnd">
-				<input type="checkbox" class="checkbox" :checked="item.selected" @click="toggleSelect(item.id)">
-				<div class="goods-img-warpper">
-					<img :src="item.img" alt="" class="goods-img">
-				</div>
-				<div class="goods-desc">
-					<h5 class="goods-title">{{item.name}}</h5>
-					<div class="goods-price">￥{{item.price}}</div>
-					<div class="number-change clearfix">
-						<span class="iconfont reduce" :class="item.number===1?disable:''" @click="reduceNumber(item.id)">&#xe794;</span>
-						<span class="number">{{item.buyNumber}}</span>
-						<span class="iconfont add" @click="addNumber(item.id)">&#xe795;</span>
+		<div class="cart-list">
+			<router-link tag="div" to="`goods-detail/${item.id}`">
+				<div v-for="item of cart" :key="item.id" 
+					:class="{'del-move': item.delete}" class="cart-item" 
+					@touchstart="touchStart" :data-goods-id="item.id" @touchend="touchEnd">
+					<input type="checkbox" class="checkbox" :checked="item.selected" :data-goods-id="item.id" @click="toggleSelect">
+					<div class="goods-img-warpper">
+						<img :src="item.img" alt="" class="goods-img">
 					</div>
+					<div class="goods-desc">
+						<h5 class="goods-title">{{item.name}}</h5>
+						<div class="goods-price">￥{{item.price}}</div>
+						<div class="number-change clearfix">
+							<span class="iconfont reduce" :class="item.number===1?disable:''" :data-goods-id="item.id" @click="reduceNumber">&#xe794;</span>
+							<span class="number">{{item.buyNumber}}</span>
+							<span class="iconfont add" :data-goods-id="item.id" @click="addNumber">&#xe795;</span>
+						</div>
+					</div>
+					<div class="del" :data-goods-id="item.id" @click="delCartGoods">删除</div>
 				</div>
-				<div class="del" @click="delCartGoods(item.id)">删除</div>
-			</li>
-		</ul>
+			</router-link>
+		</div>
 		<div class="cart-count border-top">
 			<div class="check-all">
 				<input type="checkbox" class="checkbox" :checked="selectAll" @click="toggleSelectAll(selectAll)"> 
@@ -26,7 +30,7 @@
 				<template v-else>全选</template>
 			</div>
 			<div class="price-total">
-				合计：<span>￥{{totalPrice}}</span><!-- .toFixed(2) -->
+				合计：<span>￥{{totalPrice.toFixed(2)}}</span>
 			</div>
 			<div class="settle" @click="submitCart">去结算<span v-if="(cartNum !== 0)">({{cartNum}})</span></div>
 		</div>
@@ -38,6 +42,7 @@
 	import CommonHeader from '@/components/Header';
 	import CommonFooter from '@/components/Footer';
 	import { LocalStorage } from '@/utils/storage';
+	import { stopPropagation } from '@/utils/function'
 	
 	let touchStartX = 0, touchStartTime = 0
 	export default{
@@ -72,42 +77,44 @@
 			this.countCart()
 		},
 		methods:{
-			toGoodsDetail(){
-					
+			stopPropagation(e,List) {
+				return stopPropagation(e,List);
 			},
-			delCartGoods(goodsId){
+			delCartGoods(e){
+				const {goods,index} = stopPropagation(e,this.cart)
 				this.$showModel({
 					content:"确定要删除吗",
 					success: res => {
-						const index = this.cart.findIndex(item => item.id === goodsId)
 						if(res.confirm){
+							// const index = 
 							this.cart.splice(index,1)
 							this.countCart()
 						}
 						if (res.cancel) {
-							this.cart[index].delete = false
+							goods.delete = false
 						}
 					}
 				})
 			},
-			addNumber(goodsId){
-				const index = this.cart.findIndex(item => item.id === goodsId)
-				this.cart[index].buyNumber++
+			addNumber(e){
+				const {goods} = stopPropagation(e,this.cart)
+				goods.buyNumber++
 				this.countCart()
 			},
-			reduceNumber(goodsId){
-				const index = this.cart.findIndex(item => item.id === goodsId)
-				if(this.cart[index].buyNumber > 1){
-					this.cart[index].buyNumber--
+			reduceNumber(e){
+				const {goods} = stopPropagation(e,this.cart)
+				if(goods.buyNumber > 1){
+					goods.buyNumber--
 					this.countCart()
 				}
 			},
-			toggleSelect(goodsId){
-				const index = this.cart.findIndex(item => item.id === goodsId)
-				this.cart[index].selected = !this.cart[index].selected
+			toggleSelect(e){
+				const {goods} = stopPropagation(e,this.cart)
+				goods.selected = !goods.selected
 				this.countCart()
 			},
 			touchStart(event){
+				
 				touchStartX = event.changedTouches[0].clientX
 				touchStartTime = event.timeStamp
 			},
@@ -117,7 +124,6 @@
 				const time = event.timeStamp - touchStartTime
 				const goodsId = parseInt(elem.dataset.goodsId)
 				const index = this.cart.findIndex(item => item.id === goodsId)
-				// console.log(elem,distance,time)
 				if(distance < -100 && time < 500){
 					this.cart.forEach((item, key) => {
 						if (key !== index) {

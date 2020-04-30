@@ -1,6 +1,6 @@
 <template>
 	<div class="goods-list">
-		<div class="goods-item" v-for="(item,index) of goodsList" :key="index">
+		<router-link tag="div" to="`goods-detail/${item.id}`" class="goods-item" v-for="(item,index) of goodsList" :key="index">
 			<div class="goods-img-warpper">
 				<img class="goods-img" :src="item.img" alt="">
 			</div>
@@ -8,9 +8,9 @@
 				<h5 class="goods-title">{{item.name}}</h5>
 				<div class="goods-price"><span>￥{{item.price|formatPrice}}</span><span class="market">￥{{item.market_price|formatPrice}}</span></div>
 				<div class="goods-brower">{{item.sale_num}}人购买</div>
-				<div class="btn" @click="addToCart(item)">加入购物车</div>
+				<div class="btn" :data-goods-id="item.id" @click="addToCart">加入购物车</div>
 			</div>
-		</div>
+		</router-link>
 	</div>
 </template>
 
@@ -23,7 +23,17 @@
 		},
 		mixins:[filters],
 		methods:{
-			addToCart(goods){
+			addToCart(e){
+				e.stopPropagation()
+				const goodsId = parseInt(e.target.dataset.goodsId)
+				let goods
+				this.goodsList.forEach(item => {
+					for(let key in item){
+						if(item[key] === goodsId){
+							goods = item
+						}
+					}
+				})
 				this.$showModel({
 					content: '是否加入购物车',
 					btn: ['否','是'],
