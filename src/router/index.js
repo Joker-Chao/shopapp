@@ -3,9 +3,19 @@ import VueRouter from "vue-router";
 import Home from "@/pages/home/index";
 import Category from "@/pages/category/index";
 import Cart from "@/pages/cart/index";
+import User from "@/pages/user/index";
+import UserAddress from "@/pages/user-address/index";
+import AddAddress from "@/pages/add-address/index";
 import GoodsList from "@/pages/goods-list/index";
 import GoodsDetail from "@/pages/goods-detail/index";
 import GoodsError from "@/pages/goods-nofound/index";
+import Login from "@/pages/login/index";
+import Register from "@/pages/register/index";
+import Coupon from "@/pages/coupon/index";
+import Order from "@/pages/order/index";
+import OrderPay from "@/pages/order-pay/index";
+import OrderAddress from "@/pages/order-address/index";
+import { Token } from "@/utils/token";
 
 Vue.use(VueRouter);
 
@@ -24,6 +34,51 @@ const routes = [
     path: "/cart",
     name: "Cart",
     component: Cart
+  },
+  {
+    path: "/user",
+    name: "User",
+    component: User
+  },
+  {
+    path: "/user/address",
+    name: "UserAddress",
+    component: UserAddress
+  },
+  {
+    path: "/user/add-address",
+    name: "AddAddress",
+    component: AddAddress
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: Register
+  },
+  {
+    path: "/coupon",
+    name: "Coupon",
+    component: Coupon
+  },
+  {
+    path: "/order",
+    name: "Order",
+    component: Order
+  },
+  {
+    path: "/order/pay",
+    name: "OrderPay",
+    component: OrderPay
+  },
+  {
+    path: "/order/address",
+    name: "OrderAddress",
+    component: OrderAddress
   },
   {
     path: "/goods-list",
@@ -75,6 +130,41 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
   linkExactActiveClass: "active"
+});
+
+// 需要做登录验证的路由名称
+const AUTH_ROUTER_NAME = [
+  "Coupon",
+  "Order",
+  "User",
+  "UserAddress",
+  "AddAddress",
+  "OrderAddress",
+  "OrderPay"
+];
+// 登录验证
+router.beforeEach((to, from, next) => {
+  if (AUTH_ROUTER_NAME.includes(to.name)) {
+    const token = Token.getToken();
+    if (token === "") {
+      console.log(from);
+      console.log(to);
+      let url;
+      if (to.query.loginRedirect) {
+        console.log(1, to.query.loginRedirect);
+        url = decodeURIComponent(to.query.loginRedirect);
+      } else {
+        console.log(2);
+        url = encodeURIComponent(to.path);
+      }
+      console.log("url", url);
+      next(`/login?url=${url}`);
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;

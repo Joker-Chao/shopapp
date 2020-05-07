@@ -49,7 +49,12 @@
 				if(this.back === ''){
 					this.$router.push('/')
 				}else{
-					this.$router.push(this.back)
+					// console.log(this.$route.path) 
+					// if(this.$route.path === '/login' || this.$route.path === '/register'){
+					// 	this.$router.replace(this.back)
+					// }else{
+						this.$router.push(this.back)
+					// }
 				}
 			},
 			toCart(){

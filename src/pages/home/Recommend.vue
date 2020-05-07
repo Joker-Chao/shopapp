@@ -3,7 +3,7 @@
 		<template v-slot:content>
 			<div class="goods-list-container" ref="warpper">
 				<div class="goods-list" ref="recommend">
-					<router-link tag="div" to="`goods-detail/${item.id}`" class="goods-item border" v-for="item of recommendList" :key="item.id">
+					<router-link tag="div" :to="`/goods-detail/${item.id}`" class="goods-item border" v-for="item of recommendList" :key="item.id">
 						<img class="goods-img" v-lazy="item.img" alt="">
 						<div class="goods-info">
 							<div class="goods-name">{{item.name}}</div>

@@ -5,8 +5,10 @@ import VueLazyload from "vue-lazyload";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import Loading from './plugin/loading'
-import Model from './plugin/model'
+import Loading from './plugin/loading';
+import Model from './plugin/model';
+import Toast from './plugin/toast';
+
 
 axios.defaults.baseURL = '/api/';
 axios.defaults.timeout = 8000;
@@ -28,6 +30,8 @@ Vue.use(VueAxios, axios);
 //自定义加载插件
 Vue.use(Loading)
 Vue.use(Model)
+Vue.use(Toast)
+
 
 //图片加载
 Vue.use(VueLazyload,{

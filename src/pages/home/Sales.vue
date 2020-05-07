@@ -2,14 +2,12 @@
 	<container title="特惠清仓" morePath="/goods-list">
 		<template v-slot:content v-if="show">
 			<swiper :options="swiperOptions" class="swiper-container" v-if="show">
-				<swiper-slide v-for="(item,index) of pages" :key="index">
-					<router-link tag="div" to="`goods-detail/${item.id}`" class="swiper-page">
-						<div class="swiper-goods border" v-for="val of item" :key="val.id">
-							<img :src="val.img" alt="" class="goods-img">
-							<div class="goods-info">
-								<div class="goods-name">{{val.name}}</div>
-								<div class="goods-price">￥{{val.price|formatPrice}}</div>
-							</div>
+				<swiper-slide v-for="(item,index) of pages" :key="index" class="swiper-page">
+					<router-link tag="div" :to="`/goods-detail/${val.id}`" class="swiper-goods border" v-for="val of item" :key="val.id">
+						<img v-lazy="val.img" alt="" class="goods-img">
+						<div class="goods-info">
+							<div class="goods-name">{{val.name}}</div>
+							<div class="goods-price">￥{{val.price|formatPrice}}</div>
 						</div>
 					</router-link>
 				</swiper-slide>

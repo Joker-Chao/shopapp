@@ -1,6 +1,6 @@
 <template>
 	<div class="goods-list">
-		<router-link tag="div" to="`goods-detail/${item.id}`" class="goods-item" v-for="(item,index) of goodsList" :key="index">
+		<router-link tag="div" :to="`goods-detail/${item.id}`" class="goods-item" v-for="(item,index) of goodsList" :key="index">
 			<div class="goods-img-warpper">
 				<img class="goods-img" :src="item.img" alt="">
 			</div>

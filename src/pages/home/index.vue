@@ -25,7 +25,7 @@
 	import Sales from './Sales';
 	import NewGoods from './NewGoods';
 	import GoodsList from './GoodsList';
-	import { SessionStorage } from '@/utils/storage';
+	import { LocalStorage } from '@/utils/storage';
 	
 	export default{
 		directives:{infiniteScroll},
@@ -70,25 +70,25 @@
 		},
 		methods:{
 			async getSwiper(){
-				const swiper = SessionStorage.getItem('swiper');
+				const swiper = LocalStorage.getItem('swiper');
 				if(swiper){
 					this.swiperList = swiper;
 				}else{
 					const res = await this.axios.get('api/swiper?type=1');
 					const swiperList = res.map(item => item.img);
 					this.swiperList = swiperList;
-					SessionStorage.setItem('swiper',swiperList);
+					LocalStorage.setItem('swiper',swiperList);
 				}
 				
 			},
 			async getIconNav(){
-				const navList = SessionStorage.getItem('navList');
+				const navList = LocalStorage.getItem('navList');
 				if(navList){
 					this.navList = navList;
 				}else{
 					const navList = await this.axios.get('api/navigate?type=1');
 					this.navList = navList;
-					SessionStorage.setItem('navList',navList);
+					LocalStorage.setItem('navList',navList);
 				}
 			},
 			async getRecommend(){

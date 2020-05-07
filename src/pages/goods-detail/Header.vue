@@ -22,6 +22,16 @@
 			showIconMenu: {
 				type: Boolean,
 				default: true
+			},
+			opacity: {
+			  type: Number,
+			  default: 1
+			},
+			scrollTab: String
+		},
+		methods:{
+			changeTab(tabName){
+				this.$emit('tab',tabName)
 			}
 		}
 	}
@@ -50,7 +60,7 @@
       background: rgba($color: #000000, $alpha: .3);
       @include layout-flex;
       color: $color-white;
-      font-size: .4rem;
+      font-size: .36rem;
     }
   }
   .menu-header{
@@ -65,7 +75,7 @@
       width: .6rem;
       height: .6rem;
       @include layout-flex;
-      font-size: .4rem;
+      font-size: .36rem;
     }
     .header-tab{
       width: 0;

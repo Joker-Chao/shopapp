@@ -2,10 +2,8 @@
 	<div class="page">
 		<common-header :title="'购物车'" :back="backUrl" :manage="true"></common-header>
 		<div class="cart-list">
-			<router-link tag="div" to="`goods-detail/${item.id}`">
-				<div v-for="item of cart" :key="item.id" 
-					:class="{'del-move': item.delete}" class="cart-item" 
-					@touchstart="touchStart" :data-goods-id="item.id" @touchend="touchEnd">
+			<div v-for="item of cart" :key="item.id" @touchstart="touchStart" :data-goods-id="item.id" @touchend="touchEnd">
+				<router-link tag="div" :to="`goods-detail/${item.id}`" class="cart-item" :class="{'del-move': item.delete}"  >
 					<input type="checkbox" class="checkbox" :checked="item.selected" :data-goods-id="item.id" @click="toggleSelect">
 					<div class="goods-img-warpper">
 						<img :src="item.img" alt="" class="goods-img">
@@ -20,8 +18,8 @@
 						</div>
 					</div>
 					<div class="del" :data-goods-id="item.id" @click="delCartGoods">删除</div>
-				</div>
-			</router-link>
+				</router-link>
+			</div>
 		</div>
 		<div class="cart-count border-top">
 			<div class="check-all">
@@ -86,7 +84,6 @@
 					content:"确定要删除吗",
 					success: res => {
 						if(res.confirm){
-							// const index = 
 							this.cart.splice(index,1)
 							this.countCart()
 						}
@@ -113,15 +110,15 @@
 				goods.selected = !goods.selected
 				this.countCart()
 			},
-			touchStart(event){
+			touchStart(e){
 				
-				touchStartX = event.changedTouches[0].clientX
-				touchStartTime = event.timeStamp
+				touchStartX = e.changedTouches[0].clientX
+				touchStartTime = e.timeStamp
 			},
-			touchEnd(event){
-				const elem = event.currentTarget
-				const distance = event.changedTouches[0].clientX - touchStartX
-				const time = event.timeStamp - touchStartTime
+			touchEnd(e){
+				const elem = e.currentTarget
+				const distance = e.changedTouches[0].clientX - touchStartX
+				const time = e.timeStamp - touchStartTime
 				const goodsId = parseInt(elem.dataset.goodsId)
 				const index = this.cart.findIndex(item => item.id === goodsId)
 				if(distance < -100 && time < 500){
@@ -132,6 +129,9 @@
 							item.delete = true
 						}
 					})
+					setTimeout(() => {
+						this.cart[index].delete = false
+					},3000)
 				}
 				if(distance > 100 && time < 500){
 					this.cart[index].delete = false
@@ -155,11 +155,16 @@
 				this.cart.forEach(item => {
 					item.selected = !this.selectAll
 				})
-				// console.log(this.cart)
 				this.countCart()
 			},
 			submitCart(){
-				
+				if(this.cartNum === 0){
+					this.$showToast({
+						message: '至少选择一个商品'
+					})
+					return
+				}
+				this.$router.push('/order?loginRedirect='+ encodeURIComponent('/order'))
 			}
 		}
 	}
