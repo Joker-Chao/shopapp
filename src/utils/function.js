@@ -1,3 +1,4 @@
+import { config } from "@/config/config";
 //取消小数点后末尾的零
 const formatPrice = price => {
   const arr = price.toString().split(".");
@@ -61,4 +62,11 @@ const validate = function(data, validateObject) {
   return { error: 0 };
 };
 
-export { formatPrice, stopPropagation, dateFormat, validate };
+const getOrderStatus = function(status) {
+  const {
+    order: { status: statusOptions }
+  } = config;
+  return statusOptions[status] || "";
+};
+
+export { formatPrice, stopPropagation, dateFormat, validate, getOrderStatus };

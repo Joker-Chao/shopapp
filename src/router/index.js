@@ -72,6 +72,14 @@ const routes = [
   },
   {
     path: "/order/pay",
+    beforeEach(to, from, next) {
+      const id = to.query.id;
+      if (!/^\d+$/.test(id)) {
+        next("/");
+      } else {
+        next();
+      }
+    },
     name: "OrderPay",
     component: OrderPay
   },

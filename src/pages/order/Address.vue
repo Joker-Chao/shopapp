@@ -60,6 +60,7 @@ export default{
 		width: 0;
 		flex: 1;
 		height: 100%;
+		margin-left: .2rem;
 		.empty-address{
 			width: 100%;
 			height: 100%;
