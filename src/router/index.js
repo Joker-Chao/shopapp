@@ -137,7 +137,10 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
-  linkExactActiveClass: "active"
+  linkExactActiveClass: "active",
+  scrollBehavior() {
+    return { x: 0, y: 0 };
+  }
 });
 
 // 需要做登录验证的路由名称
@@ -155,8 +158,8 @@ router.beforeEach((to, from, next) => {
   if (AUTH_ROUTER_NAME.includes(to.name)) {
     const token = Token.getToken();
     if (token === "") {
-      console.log(from);
-      console.log(to);
+      // console.log(from);
+      // console.log(to);
       let url;
       if (to.query.loginRedirect) {
         console.log(1, to.query.loginRedirect);
@@ -165,7 +168,6 @@ router.beforeEach((to, from, next) => {
         console.log(2);
         url = encodeURIComponent(to.path);
       }
-      console.log("url", url);
       next(`/login?url=${url}`);
     } else {
       next();

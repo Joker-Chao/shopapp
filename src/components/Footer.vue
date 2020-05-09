@@ -12,10 +12,10 @@
 			<span class="iconfont">&#xe60c;</span>
 			<span>购物车</span>
 		</router-link>
-		<div class="footer-nav">
+		<router-link tag="div" to="/user" class="footer-nav">
 			<span class="iconfont">&#xe6b1;</span>
 			<span>我的</span>
-		</div>
+		</router-link>
 	</div>
 </template>
 

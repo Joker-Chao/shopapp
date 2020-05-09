@@ -1,20 +1,20 @@
 /*
-*	@Descripttion: 
-*/
+ *	@Descripttion:
+ */
 
 module.exports = {
   devServer: {
-	host: 'localhost',
+    host: "localhost",
     port: "8888",
-	inline: true,
-	proxy:{
-		'/api':{
-			target:'http://www.2yue.cc/index.php/',
-			changeOrigin: true,
-			pathRewrite: {
-				'^/api': ''
-			}
-		}
-	}
+    inline: true,
+    proxy: {
+      "/api": {
+        target: "http://api.2yue.cc/index.php/",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api": ""
+        }
+      }
+    }
   }
-}
+};
