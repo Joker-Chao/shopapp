@@ -43,7 +43,7 @@
     	</div>
     	<div class="footer-right">
       		<div class="cart" @click="addToCart">加入购物车</div>
-			<router-link tag="div" :to="`/order?loginRedirect=${encodeURIComponent('/goods-detail')}`" class="buy">立即购买</div>
+			<router-link tag="div" :to="`/order?loginRedirect=${encodeURIComponent('/goods-detail')}`" class="buy">立即购买</router-link>
     	</div>
   	</div>
 </div>
@@ -144,35 +144,37 @@ export default{
 			if (this.id === 0) {
 				return
 			}
-			const goods = this.goods
-			const cart = LocalStorage.getItem('cart') || []
-			const index = cart.findIndex(item => item.id === this.id)
-			const cartData = {
-				id: goods.goods_id,
-				img: goods.goods_img,
-				name: goods.goods_name,
-				price: goods.goods_price
-			}
-			if (index === -1) {
-				cartData.selected = true
-				cartData.buyNumber = 1
-				cart.push(cartData)
-			} else {
-				const buyNumber = cart[index].buyNumber
-				const selected = cart[index].selected
-				cart[index] = {
-					...cartData,
-					selected,
-					buyNumber: 1 + buyNumber
-				}
-			}
-			LocalStorage.setItem('cart', cart)
 			this.$showModel({
 				content: '是否加入购物车？',
 				btn: ['否', '是'],
 				success: res => {
+					const goods = this.goods
+					if(Object.keys(goods).length === 0){
+						return
+					}
 					if (res.confirm) {
-						this.$router.push('/cart')
+						const cart = LocalStorage.getItem('cart') || []
+						const index = cart.findIndex(item => item.id === this.id)
+						const cartData = {
+							id: goods.goods_id,
+							img: goods.goods_img,
+							name: goods.goods_name,
+							price: goods.goods_price
+						}
+						if (index === -1) {
+							cartData.selected = true
+							cartData.buyNumber = 1
+							cart.push(cartData)
+						} else {
+							const buyNumber = cart[index].buyNumber
+							const selected = cart[index].selected
+							cart[index] = {
+								...cartData,
+								selected,
+								buyNumber: 1 + buyNumber
+							}
+						}
+						LocalStorage.setItem('cart',cart)
 					}
 				}
 			})
