@@ -90,7 +90,7 @@ export default{
             if(index > -1){
                 const coupon = this.couponList[index]
                 if(coupon.points >0 && coupon.points > this.points){
-                    this.showToast({
+                    this.$showToast({
                         message: '积分不足'
                     })
                     return

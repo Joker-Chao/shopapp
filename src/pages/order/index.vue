@@ -1,19 +1,19 @@
 <template>
-<div class="page">
+  <div class="page">
     <common-header title="确认订单" back="/cart"></common-header>
     <order-address :address="address"></order-address>
     <div class="cart-container">
-        <div class="cart-item" v-for="item of cart" :key="item.id">
-            <img :src="item.img" class="cart-img"/>
-            <div class="cart-desc">
-                <div class="name">{{item.name}}</div>
-                <div class="price">{{item.price}}</div>
-                <div class="number">&times;{{item.buyNumber}}</div>
-            </div>
+      <div class="cart-item" v-for="item of cart" :key="item.id">
+        <img :src="item.img" class="cart-img"/>
+        <div class="cart-desc">
+          <div class="name">{{item.name}}</div>
+          <div class="price">{{item.price}}</div>
+          <div class="number">&times;{{item.buyNumber}}</div>
         </div>
+      </div>
     </div>
     <div class="coupon-container">
-        <div class="coupon-item" v-for="item of coupon" :key="item.id" @click="chooseCoupon(item.id)">
+      <div class="coupon-item" v-for="item of coupon" :key="item.id" @click="chooseCoupon(item.id)">
             <span class="iconfont">&#xe613;</span>
             <div class="coupon-content">
                 使用￥{{item.money}}元优惠券
@@ -94,7 +94,7 @@ export default{
             const userAddress = LocalStorage.getItem('address') || {}
             if(Object.keys(userAddress).length > 0){
                 this.address = userAddress
-				console.log(545)
+				// console.log(this.address)
                 return
             }
             const address = await this.axios.get('shose/address/default',{
@@ -107,7 +107,7 @@ export default{
             })
             this.address = address || {}
 			console.log(address)
-            // LocalStorage.setItem('address',this.address)
+            LocalStorage.setItem('address',this.address)
         },
         async getUserCoupon(){
             const userCoupon = LocalStorage.getItem('userCoupon') || []
@@ -127,10 +127,92 @@ export default{
             LocalStorage.setItem('userCoupon', this.coupon)
         },
         chooseCoupon(couponId){
-            console.log(couponId)
+			if(this.selectCouponId != 0 && this.selectCouponId !== couponId){
+				this.actualPayment = this.total
+			}
+			this.selectCouponId = couponId
+			this.coupon.forEach(item => {
+				if(item.id === couponId){
+					const currentSelect = !item.selected
+					const money = parseFloat(item.money)
+					item.selected = currentSelect
+					if(currentSelect){
+						this.actualPayment -= money
+					}else{
+						this.actualPayment += money
+					}
+				}else{
+					item.selected = false
+				}
+			})
         },
-        submitOrder(){
-
+        async submitOrder(){
+			const token = USER_TOKEN
+			if(token === ''){
+				this.$router.push('./login?url=' + encodeURIComponent('/order'))
+			}
+			const address = LocalStorage.getItem('address') || {}
+			if(Object.keys(address).length === 0){
+				this.$showToast({
+					message: '请选择地址'
+				})
+				return
+			}
+			if(this.cart.length === 0){
+				this.$showToast({
+					message: '请选择商品'
+				})
+				return
+			}
+			
+			const data = {}
+			data.address_id = parseInt(address.id)
+			data.goods = []
+			this.cart.forEach(item => {
+				data.goods.push({
+					goods_id: item.id,
+					count: item.buyNumber
+				})
+			})
+			if(this.coupon.length > 0){
+				const selectCoupon = this.coupon.filter(item => item.selected)
+				if(selectCoupon.length > 0){
+					data.coupon_id = selectCoupon[0].id
+				}	
+			}
+			try{
+				this.$showLoading()
+				const res = await this.axios.post('shose/order',data,{
+					headers: {
+						token
+					}
+				})
+				if(res.pass){
+					// 删除购物车中购买成功的商品
+					const cartAll = LocalStorage.getItem('cart')
+					const cart = cartAll.filter(item => {
+						const index = this.cart.findIndex(val => item.id === val.id)
+						return index === -1
+					})
+					if(cart.length > 0){
+						LocalStorage.setItem('cart',cart)
+					}else{
+						LocalStorage.deleteItem('cart')
+					}
+					 // 清空优惠券信息
+					 LocalStorage.deleteItem('userCoupon')
+					 this.$router.replace('/order/pay?id=' + res.order_id)
+				}
+			} catch(error){
+				this.$showToast({
+					message: error.message,
+					callback: () => {
+						this.$router.replace('/cart')
+					}
+				})
+			}finally{
+				this.$hideLoading()
+			}
         }
     }
 }  

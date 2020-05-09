@@ -90,10 +90,11 @@ export default {
 				is_defalut: this.isDefalut ? 1 : 0
 			}
 			const res = validate(data,addressValidator)
-			if(res.err !== 0){
+			if(res.error !== 0){
 				this.$showToast({
 					message: res.message
 				})
+				console.log(res)
 				return
 			}
 			this.$showLoading()
@@ -113,7 +114,7 @@ export default {
 				this.$hideLoading()
 			})
 		},
-		selectAddres(data){
+		selectAddress(data){
 			this.region = [
 				data.province.value,
 				data.city.value,
@@ -154,21 +155,24 @@ export default {
 			}
 			input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{
 				color:$color-nine;
+				font-size: .28rem;
 			}
 			input::-moz-placeholder,textarea::-moz-placeholder{   /* Mozilla Firefox 19+ */
 				color:$color-nine;
+				font-size: .28rem;
 			}
 			input:-moz-placeholder,textarea::-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
 				color:$color-nine;
+				font-size: .28rem;
 			}
 			input:-ms-input-placeholder,textarea::-moz-placeholder{  /* Internet Explorer 10-11 */ 
 				color:$color-nine;
+				font-size: .28rem;
 			}
 			.textarea{
 				width: 5.2rem;
 				font-size: .28rem;
 				line-height: .4rem;
-				display: block;
 				resize: none;
 			}
 			.region-input{
