@@ -11,7 +11,7 @@
 	</div>
 	<div class="order-goods">
 		<div class="flag">
-			<span class="iconfont" @click="showGoods=!showGoods">{{showGoods?'&#xe68b;':'&#xe631;'}}</span>
+			<span class="iconfont" @click="showGoods=!showGoods">{{showGoods?'&#xe718;':'&#xe719;'}}</span>
 		</div>
 		<div class="cart-container" v-show="showGoods">
 			<div class="cart-item" v-for="item of order.goods" :key="item.goods_id">
@@ -135,7 +135,7 @@ export default{
 			width: 100%;
 			margin-bottom: .2rem;
 			@include layout-flex;
-			color: $color-bg;
+			color: $color-six;
 			font-size: .28rem;
 			span{
 				width: 1.3rem;
@@ -196,14 +196,9 @@ export default{
 			height: .6rem;
 			.iconfont{
 				float: right;
-				display: block;
-				width: .4rem;
-				height: .4rem;
-				border: 1px solid $color-three;
-				border-radius: 50%;
 				@include layout-flex;
 				color: $color-six;
-				font-size: .24rem;
+				font-size: .5rem;
 			}
 		}
 		.cart-container{
@@ -232,7 +227,7 @@ export default{
 					color: $color-six;
 					.number{
 						font-size: .24rem;
-						color: $color-bg;
+						color: $color-nine;
 					}
 				}
 			}

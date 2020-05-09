@@ -43,7 +43,7 @@
     	</div>
     	<div class="footer-right">
       		<div class="cart" @click="addToCart">加入购物车</div>
-			<div class="buy">立即购买</div>
+			<router-link tag="div" :to="`/order?loginRedirect=${encodeURIComponent('/goods-detail')}`" class="buy">立即购买</div>
     	</div>
   	</div>
 </div>
