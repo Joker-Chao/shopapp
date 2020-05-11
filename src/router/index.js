@@ -5,6 +5,7 @@ import Category from "@/pages/category/index";
 import Cart from "@/pages/cart/index";
 import User from "@/pages/user/index";
 import UserAddress from "@/pages/user-address/index";
+import UserInfo from "@/pages/user-info/index";
 import AddAddress from "@/pages/add-address/index";
 import GoodsList from "@/pages/goods-list/index";
 import GoodsDetail from "@/pages/goods-detail/index";
@@ -44,6 +45,11 @@ const routes = [
     path: "/user/address",
     name: "UserAddress",
     component: UserAddress
+  },
+  {
+    path: "/user/info",
+    name: "UserInfo",
+    component: UserInfo
   },
   {
     path: "/user/add-address",

@@ -30,10 +30,14 @@ export default{
 		CommonHeader
 	},
 	beforeRouteEnter (to, from, next) {
-		next(vm => {
-			vm.backUrl = to.query.url || from.path
-			vm.addressId = parseInt(to.query.id)
-		})
+		if(from.path === '/' || from.path === ''){
+			next('/')
+		}else{
+			next(vm => {
+				vm.backUrl = to.query.url || from.path
+				vm.addressId = parseInt(to.query.id)
+			})
+		}
 	},
 	data(){
 		return {
@@ -55,6 +59,7 @@ export default{
 			}
 		},
 		async getUserAddress(){
+			this.$showLoading()
 			this.address = await this.axios.get('shose/address',{
 				headers: {
 					token: USER_TOKEN
@@ -65,6 +70,7 @@ export default{
 				return item
 			}))
 			this.showAddAddress = (MAX_ADDRESS_NUM - this.address.length) > 0
+			this.$hideLoading()
 		}
 	}
 }  

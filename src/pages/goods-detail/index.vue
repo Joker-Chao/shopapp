@@ -91,11 +91,12 @@ export default{
 			}
 		}
 	},
-	mounted(){
-		this.getGoods()
-		this.initScroll()
-		this.initCollect()
-		// Token.deleteToken()		
+	async mounted(){
+		this.$showLoading()
+		await this.getGoods()
+		await this.initScroll()
+		await this.initCollect()
+		this.$hideLoading()		
 	},
 	methods:{
 		async initCollect(){

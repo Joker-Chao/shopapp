@@ -1,11 +1,11 @@
 <template>
-<div class="page">
+<div class="page" ref="page">
 	<comment-header title="我的"></comment-header>
 	<div class="user-container">
 		<div class="user-wrapper">
 			<div class="user-avatar">
 				<img :src="user.avatar">
-				<input type="file" accept="images/*" @change="chooseAvatr">
+				<input type="file" accept="images/*" @change="chooseAvatar">
 			</div>
 			<div class="user">
 				<div class="nickname" @click="$router.push('/user/info')">{{user.nickname}}<span class="level">lv{{user.level}}</span></div>
@@ -52,7 +52,7 @@
 				<div class="navigate-text">我的收藏</div>
 				<span class="iconfont">&#xe636;</span>
 			</div>
-			<div class="navigate-cell border-bottom">
+			<div class="navigate-cell border-bottom" @click="$router.push('/user/address')">
 				<span class="iconfont icon">&#xe611;</span>
 				<div class="navigate-text">我的地址</div>
 				<span class="iconfont">&#xe636;</span>
@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import {mapState,mapActions} from 'vuex';
 import CommentHeader from '@/components/Header';
 import CommentFooter from '@/components/Footer';
 import { Token } from '@/utils/token'
@@ -92,27 +93,20 @@ export default{
 		CommentHeader,
 		CommentFooter
 	},
-	mounted(){
-		this.getUser()
+	async mounted(){
+		this.$showLoading()
+		let bodyHeight = document.documentElement.offsetHeight
+		this.$refs.page.style.height = bodyHeight + 'px'
+		await this.getUser(this.axios)
+		this.$hideLoading()
 	},
-	data(){
-		return {
-			user: ''
-		}
+	computed: {
+	  ...mapState(['user'])
 	},
 	methods: {
-		async getUser(){
-			this.$showLoading()
-			const token = Token.getToken()
-			const user = await this.axios.get('api/user',{
-				headers:{
-					token
-				}
-			})
-			this.user = user
-			this.$hideLoading()
-		},
-		chooseAvatr(e){
+		...mapActions(['getUser']),
+		chooseAvatar(e){
+			console.log(e)
 			if(e.target.files.length > 0){
 				const file = e.target.files[0]
 				const allowType = ['image/jpeg','image/gif','image/png','image/jpg','image/webp']
@@ -130,15 +124,17 @@ export default{
 					return 
 				}
 				const token = Token.getToken()
-				const data = {image: file}
+				const data = new FormData()
+				data.append('image',file)
 				this.$showLoading()
 				this.axios.post('api/user/avatar',data,{
 					headers: {
 						token,
-						'Content-Type' : 'multipart/form-data'
+						'Content-Type':'multipart/form-data'
 					}
 				}).then(res => {
 					this.user.avatar = res.src
+					console.log(res)
 				}).catch(err => {
 					this.$showToast({
 						message: err.message
@@ -146,7 +142,6 @@ export default{
 				}).finally(() => {
 					this.$hideLoading()
 				})
-				console.log(file)
 			} 
 		}
 	}
@@ -157,7 +152,8 @@ export default{
 @import '~@/assets/scss/global';
 .page{
 	width: 100%;
-	margin-top: $header-h;
+	padding-top: $header-h;
+	box-sizing: border-box;
 	.user-container{
 		width: 100%;
 		height: 3.86rem;

@@ -14,7 +14,7 @@
     </div>
     <div class="coupon-container">
       <div class="coupon-item" v-for="item of coupon" :key="item.id" @click="chooseCoupon(item.id)">
-            <span class="iconfont">&#xe613;</span>
+            <span class="iconfont">&#xe603;</span>
             <div class="coupon-content">
                 使用￥{{item.money}}元优惠券
             </div>
@@ -270,7 +270,7 @@ export default{
             @include layout-flex;
             .iconfont{
                 color: $color-global;
-                font-size: .36rem;
+                font-size: .32rem;
             }
             .coupon-content{
                 width: 0;
