@@ -23,7 +23,6 @@
 import CommonHeader from '@/components/Header'
 import {Token} from "@/utils/token"
 import {LocalStorage} from "@/utils/storage"
-const USER_TOKEN = Token.getToken()
 const MAX_ADDRESS_NUM = 10
 export default{
 	components: {
@@ -60,6 +59,7 @@ export default{
 		},
 		async getUserAddress(){
 			this.$showLoading()
+			const USER_TOKEN = Token.getToken()
 			this.address = await this.axios.get('shose/address',{
 				headers: {
 					token: USER_TOKEN

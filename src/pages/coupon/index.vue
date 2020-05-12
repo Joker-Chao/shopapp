@@ -28,7 +28,7 @@ import {Token} from "@/utils/token"
 import {LocalStorage} from "@/utils/storage"
 import {filters} from "@/utils/mixins"
 import {dateFormat, formatPrice} from "@/utils/function"
-const USER_TOKEN = Token.getToken()
+
 export default{
     components: {
         CommonHeader
@@ -79,6 +79,7 @@ export default{
             })
         },
         async getUserPoints(){
+			const USER_TOKEN = Token.getToken()
             this.points = await this.axios.get('shose/user-points',{
                 headers:{
                     token: USER_TOKEN
@@ -96,6 +97,7 @@ export default{
                     return
                 }
                 this.$showLoading()
+				const USER_TOKEN = Token.getToken()
                 this.axios.post('shose/coupon/get',{
                     coupon_id : couponId
                 },{

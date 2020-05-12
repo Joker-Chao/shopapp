@@ -43,7 +43,7 @@
     	</div>
     	<div class="footer-right">
       		<div class="cart" @click="addToCart">加入购物车</div>
-			<router-link tag="div" :to="`/order?loginRedirect=${encodeURIComponent('/goods-detail')}`" class="buy">立即购买</router-link>
+			<router-link tag="div" :to="`/order?loginRedirect=${encodeURIComponent('/goods-detail')}&id=${id}`" class="buy">立即购买</router-link>
     	</div>
   	</div>
 </div>
@@ -57,7 +57,6 @@ import DetailInfo from "./Info"
 import DetailComment from "./Comment"
 import { Token } from '@/utils/token'
 import { LocalStorage } from '@/utils/storage'
-const USER_TOKEN = Token.getToken()
 
 export default{
 	props:{
@@ -91,16 +90,14 @@ export default{
 			}
 		}
 	},
-	async mounted(){
-		this.$showLoading()
-		await this.getGoods()
-		await this.initScroll()
-		await this.initCollect()
-		this.$hideLoading()		
+	mounted(){
+		this.getGoods()
+		this.initScroll()
+		this.initCollect()	
 	},
 	methods:{
 		async initCollect(){
-			const token = USER_TOKEN
+			const token = Token.getToken()
 			if(token === ''){
 				this.isCollect = false
 				return 
@@ -118,7 +115,7 @@ export default{
 		},
 		async collect(){
 			// 判断是否登录
-			const token = USER_TOKEN
+			const token = Token.getToken()
 			// 没有登录，则跳转至登录页面
 			if(token === ''){
 				const url = encodeURIComponent('/goods-detail/'+ this.id)
@@ -186,6 +183,7 @@ export default{
 			console.log('#'+tabName)
 		},
 		getGoods(){
+			this.$showLoading()
 			this.axios.get(`api/goods?goods_id=${this.id}`).then(result => {
 				const {comment:commentList,commentTotal,gallery,goods} = result
 				this.comment = {
@@ -198,6 +196,8 @@ export default{
 			}).catch(err => {
 				console.log(err)
 				this.$router.replace('/goods-error')
+			}).finally(() => {
+				this.$hideLoading()
 			})
 		},
 		initScroll () {

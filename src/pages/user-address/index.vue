@@ -57,6 +57,39 @@ export default {
         this.getUserAddress()
     },
     methods: {
+		setDefaultAddress(addressId,isDefault){
+			if(isDefault === 1){
+				return
+			}
+			this.$showLoading()
+			const token = Token.getToken()
+			this.axios.post('shose/address/default',
+			{
+				id: addressId,
+				is_default: 1	
+			},
+			{	
+				headers: {
+					token
+				}
+			}).then(() => {
+				this.address.forEach(item => {
+					if(item.id === addressId){
+						item.is_default = 1
+					}else{
+						item.is_default = 0
+					}
+				})
+				this.$showToast({
+				  message: '设置成功'
+				})
+			}).catch(err => {
+				this.$showToast({
+					message: err.message
+				})
+			}).finally(() => this.$hideLoading())
+			
+		},
         async getUserAddress () {
 			this.$showLoading()
 			const token = Token.getToken()
@@ -76,7 +109,7 @@ export default {
 					if(res.confirm){
 						this.$showLoading()
 						const token = Token.getToken()
-						this.axios.get('api/address/delete',{id: addressId},{
+						this.axios.post('shose/address/delete',{id: addressId},{
 							headers: {
 								token
 							}
