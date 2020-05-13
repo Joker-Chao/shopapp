@@ -16,7 +16,7 @@
 		<div class="order-menu-wrapper">
 			<div class="order-menu">
 				<router-link to="/user" class="title">
-					我的订单{{$store.state.a}}
+					我的订单{{$store.state.a}}   
 					<div class="iconfont">查看更多 &#xe636;</div>
 				</router-link>
 				<div class="menu-list">
