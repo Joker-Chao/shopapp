@@ -61,10 +61,12 @@ export default {
             phone: '',
             address: '',
             isDefalut: false,
-			addressId: 0
+			addressId: 0,
+			t: 0
         }
     },
 	mounted(){
+		this.t = parseInt(this.$route.query.t || 0)
 		const addressId = this.$route.query.id || 0
 		this.addressId = parseInt(addressId)
 		if(this.addressId > 0){
@@ -140,14 +142,22 @@ export default {
 					this.$showToast({
 						message: '修改成功',
 						callback: () => {
-							LocalStorage.setItem('address',data)
+							const address = LocalStorage.getItem('address') || {}
+							if (Object.keys(address).length > 0 && parseInt(address.id) === this.addressId) {
+								LocalStorage.setItem('address',data)
+							}
 							this.$router.replace('/user/address')
 						}
 					})
 				}else{
-					data.id = res.address_id
-					LocalStorage.setItem('address',data)
-					this.$router.replace('/order')
+					if(this.t === 1){
+						this.$router.replace('/user/address')
+					}else{
+						data.id = parseInt(res.address_id)
+						LocalStorage.setItem('address',data)
+						this.$router.replace('/order')
+					}
+					
 				}
 			}).catch(err => {
 				this.$showToast({

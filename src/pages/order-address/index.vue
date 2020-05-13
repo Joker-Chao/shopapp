@@ -29,14 +29,10 @@ export default{
 		CommonHeader
 	},
 	beforeRouteEnter (to, from, next) {
-		if(from.path === '/' || from.path === ''){
-			next('/')
-		}else{
-			next(vm => {
-				vm.backUrl = to.query.url || from.path
-				vm.addressId = parseInt(to.query.id)
-			})
-		}
+		next(vm => {
+			vm.backUrl = to.query.url || from.path
+			vm.addressId = parseInt(to.query.id)
+		})
 	},
 	data(){
 		return {
@@ -54,7 +50,7 @@ export default{
 			const index = this.address.findIndex(item => item.id === selectAddressId)
 			if(index > -1){
 				LocalStorage.setItem('address',this.address[index])
-				this.$router.push('/order')
+				this.$router.replace('/order')
 			}
 		},
 		async getUserAddress(){

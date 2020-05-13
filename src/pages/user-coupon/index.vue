@@ -1,36 +1,34 @@
 <template>
 <div class="page">
 	<common-header title="我的卡券" back="/user"></common-header>
-	<div class="coupon-list">
-		<div class="coupon-item" :class="'status-bg' + item.status" v-for="item of coupon" :key="item.id">
-			<div class="coupon-info">
-				<div class="coupon-title">
-					<div class="coupon-money">
-						￥<span class="money">{{item.couponMoney}}</span>
-					</div>
-					<div class="coupon-desc">优惠券</div>
-				</div>
-				<div class="coupon-time">{{item.startTime}}-{{item.endTime}}</div>
-			</div>
-			<div class="coupon-status">
-				<div class="status-text">{{item.statusText}}</div>
-			</div>
-		</div>
-	</div>
+	<template v-if="(couponOne.length>0)">
+		<coupon-list :couponList="couponOne"></coupon-list>
+	</template>
+	<template v-if="(couponTwo.length>0)">
+		<coupon-list :couponList="couponTwo"></coupon-list>
+	</template>
+	<template v-if="(couponThree.length>0)">
+		<coupon-list :couponList="couponThree"></coupon-list>
+	</template>
 </div>
 </template>
 
 <script>
 import CommonHeader from '@/components/Header'
+import CouponList from './couponList'
 import {Token} from '@/utils/token.js'
 import {dateFormat} from "@/utils/function"
 export default{
 	components:{
-		CommonHeader
+		CommonHeader,
+		CouponList
 	},
 	data(){
 		return {
-			coupon: []
+			coupon: [],
+			couponOne: [],
+			couponTwo: [],
+			couponThree: []
 		}
 	},
 	mounted(){
@@ -49,20 +47,24 @@ export default{
 				let status = 0
 				if(item.is_use === 1){
 					status = 3
+					this.couponThree.unshift(item)
 				}else{
 					if(Date.now() > item.expires_time * 1000){
 						status = 2
+						this.couponTwo.unshift(item)
 					}else{
 						status = 1
+						this.couponOne.unshift(item)
 					}
 				}
-				item.status = status
 				item.couponMoney = parseInt(item.money)
 				item.statusText = statusOptions[status] || ''
 				item.startTime = dateFormat('YYYY.mm.dd', new Date(item.get_time * 1000))
 				item.endTime = dateFormat('YYYY.mm.dd', new Date(item.expires_time * 1000))
+				item.status = status
 				return item
 			})
+			console.log(this.coupon,this.couponOne,this.couponTwo,this.couponThree)
 		}
 	}
 }
@@ -76,75 +78,5 @@ export default{
 	padding-top: $header-h;
 	box-sizing: border-box;
 	background: $color-white;
-	.coupon-list{
-		width: 100%;
-		@include layout-flex(column);
-		.coupon-item{
-			width: 5.8rem;
-			height: 2.34rem;
-			margin-top: .2rem;
-			@include layout-flex;
-			&.status-bg1{
-				background: url(/images/card_stock-01.png);
-				background-size: contain;
-				.coupon-status{
-				  color: #ff5e46;
-				}
-			}
-			&.status-bg2{
-				background: url(/images/card_stock-02.png);
-				background-size: contain;
-				.coupon-status{
-				  color: #ff7c76;
-				}
-			}
-			&.status-bg3{
-				background: url(/images/card_stock-03.png);
-				background-size: contain;
-				.coupon-status{
-				  color: #999999;
-				}
-			}
-			.coupon-info{
-				width: 3.4rem;
-				height: 100%;
-				@include layout-flex(column);
-				color: $color-white;
-				.coupon-title{
-					width: 2.4rem;
-					height: .7rem;
-					@include layout-flex($align: baseline);
-					margin-bottom: .4rem;
-					.coupon-money{
-						font-size: .48rem;
-						.money{
-							font-size: .72rem;
-							font-weight: 600;
-						}
-					}
-					.coupon-desc{
-						font-size: .32rem;
-						margin-left: .3rem;
-					}
-					.coupon-time{
-						width: 2.6rem;
-						font-size: .22rem;
-						margin-top: .5rem;
-					}
-				}
-			}
-			.coupon-status{
-				width: 2.4rem;
-				height: 100%;
-				@include layout-flex;
-				.status-text{
-					width: 1rem;
-					font-size: .5rem;
-					font-weight: 600;
-					line-height: 1.2em;
-				}
-			}
-		}
-	}
 }
 </style>
