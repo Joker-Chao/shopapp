@@ -46,17 +46,11 @@ import addressValidator from '@/validate/address'
 import {validate} from '@/utils/function'
 import {Token} from "@/utils/token"
 import {LocalStorage} from "@/utils/storage"
-const USER_TOKEN = Token.getToken()
 
 export default {
     components: {
         CommonHeader,
 		VDistpicker
-    },
-    beforeRouteEnter (to, from, next) {
-        next(vm => {
-            vm.backUrl = to.query.url || from.path
-        })
     },
     data () {
         return {
@@ -66,9 +60,22 @@ export default {
             name: '',
             phone: '',
             address: '',
-            isDefalut: false
+            isDefalut: false,
+			addressId: 0,
+			t: 0
         }
     },
+	mounted(){
+		this.t = parseInt(this.$route.query.t || 0)
+		const addressId = this.$route.query.id || 0
+		this.addressId = parseInt(addressId)
+		if(this.addressId > 0){
+			this.backUrl = '/user/address'
+		}else{
+			this.backUrl = '/order'
+		}
+		this.getAddress()
+	},
 	computed: {
 		regionText(){
 			if(this.region.length === 0){
@@ -79,6 +86,27 @@ export default {
 		}
 	},
     methods: {
+		async getAddress(){
+			if(this.addressId <= 0){
+				return
+			} 
+			this.$showLoading()
+			const token = Token.getToken()
+			const res = await this.axios.get('shose/address',{
+				params:{
+					id: this.addressId
+				},
+				headers: {
+					token
+				}
+			}).then(res => res.address)
+			this.name = res.name
+			this.phone = res.phone
+			this.address = res.address
+			this.region = [res.province, res.city, res.area]
+            this.isDefalut = res.is_defalut === 1
+			this.$hideLoading()
+		},
 		saveAddress(){
 			const data = {
 				name: this.name,
@@ -94,18 +122,43 @@ export default {
 				this.$showToast({
 					message: res.message
 				})
-				console.log(res)
 				return
 			}
 			this.$showLoading()
-			this.axios.post('shose/address/add',data,{
+			const token = Token.getToken()
+			let url 
+			if(this.addressId > 0){
+				url = 'shose/address/update'
+				data.id = this.addressId
+			}else{
+				url = 'shose/address/add'
+			}
+			this.axios.post(url,data,{
 				headers: {
-					token: USER_TOKEN
+					token
 				}
 			}).then((res) => {
-				data.id = res.address_id,
-				LocalStorage.setItem('address',data)
-				this.$router.push('/order')
+				if(this.addressId > 0){
+					this.$showToast({
+						message: '修改成功',
+						callback: () => {
+							const address = LocalStorage.getItem('address') || {}
+							if (Object.keys(address).length > 0 && parseInt(address.id) === this.addressId) {
+								LocalStorage.setItem('address',data)
+							}
+							this.$router.replace('/user/address')
+						}
+					})
+				}else{
+					if(this.t === 1){
+						this.$router.replace('/user/address')
+					}else{
+						data.id = parseInt(res.address_id)
+						LocalStorage.setItem('address',data)
+						this.$router.replace('/order')
+					}
+					
+				}
 			}).catch(err => {
 				this.$showToast({
 					message: err.message

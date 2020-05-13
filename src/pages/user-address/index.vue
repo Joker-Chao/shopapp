@@ -18,19 +18,20 @@
 			    默认地址
 			  </div>
 			  <div class="edit-address">
-			    <span class="iconfont" @click="$router.push('/user/add-address?id=' + item.id)">&#xe67c; 编辑</span>
+			    <span class="iconfont" @click="$router.push(`/user/add-address?id=${item.id}&t=1`)">&#xe67c; 编辑</span>
 			    <span class="iconfont" @click="deleteAddress(item.id)">&#xe661; 删除</span>
 			  </div>
 			</div>
 		</div>
 	</div>
-    <div class="add-address" v-if="showAddAddress" @click="$router.push(`/user/add-address?url=/user/address`)">添加新地址</div>
+    <div class="add-address" v-if="showAddAddress" @click="$router.push(`/user/add-address?t=1`)">添加新地址</div>
 </div>
 </template>
 
 <script>
 import CommonHeader from '@/components/Header'
 import {Token} from "@/utils/token"
+import {LocalStorage} from "@/utils/storage"
 const MAX_ADDRESS_NUM = 10
 
 export default {
@@ -38,13 +39,9 @@ export default {
         CommonHeader
     },
     beforeRouteEnter (to, from, next) {
-		if(from.path === '/' || from.path === ''){
-			next('/')
-		}else{
-			next(vm => {
-				vm.backUrl = to.query.url || from.path
-			})
-		}
+		next(vm => {
+			vm.backUrl = to.query.url || from.path
+		})
     },
     data () {
         return {
@@ -57,6 +54,38 @@ export default {
         this.getUserAddress()
     },
     methods: {
+		setDefaultAddress(addressId,isDefault){
+			if(isDefault === 1){
+				return
+			}	
+			this.$showLoading()
+			const token = Token.getToken()
+			this.axios.post('shose/address/default',
+			{
+				id: addressId,
+				is_default: 1	
+			},
+			{	
+				headers: {
+					token
+				}
+			}).then(() => {
+				this.address.forEach(item => {
+					if(item.id === addressId){
+						item.is_default = 1
+					}else{
+						item.is_default = 0
+					}						
+				})
+				this.$showToast({
+					message: '设置成功'
+				})
+			}).catch(err => {
+				this.$showToast({
+					message: err.message
+				})
+			}).finally(() => this.$hideLoading())
+		},
         async getUserAddress () {
 			this.$showLoading()
 			const token = Token.getToken()
@@ -65,7 +94,6 @@ export default {
                     token
                 }
             }).then(res => res.address)
-			console.log(this.address)
             this.showAddAddress = (MAX_ADDRESS_NUM - this.address.length) > 0
 			this.$hideLoading()
         },
@@ -76,7 +104,7 @@ export default {
 					if(res.confirm){
 						this.$showLoading()
 						const token = Token.getToken()
-						this.axios.get('api/address/delete',{id: addressId},{
+						this.axios.post('shose/address/delete',{id: addressId},{
 							headers: {
 								token
 							}
@@ -86,6 +114,10 @@ export default {
 							})
 							const index = this.address.findIndex(item => item.id === addressId)
 							this.address.splice(index,1)
+							const address = LocalStorage.getItem('address') || {}
+							if (Object.keys(address).length > 0 && parseInt(address.id) === addressId) {
+							  LocalStorage.deleteItem('address')
+							}
 						}).catch(err => {
 							this.$showToast({
 								message: err.message
@@ -154,7 +186,7 @@ export default {
 				margin-right: .4rem;
 				color: $color-six;
 				.iconfont{
-					margin-right: .2rem;
+					margin-left: .2rem;
 				}
 			}
 		}

@@ -62,7 +62,7 @@
 				<div class="navigate-text">我的足迹</div>
 				<span class="iconfont">&#xe636;</span>
 			</div>
-			<div class="navigate-cell border-bottom">
+			<div class="navigate-cell border-bottom" @click="$router.push('/user/coupon')">
 				<span class="iconfont icon">&#xe603;</span>
 				<div class="navigate-text">我的卡券</div>
 				<span class="iconfont">&#xe636;</span>

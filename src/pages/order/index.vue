@@ -36,7 +36,6 @@ import CommonHeader from '@/components/Header'
 import OrderAddress from './Address'
 import {Token} from "@/utils/token"
 import {LocalStorage} from "@/utils/storage"
-const USER_TOKEN = Token.getToken()
 export default{
     components: {
         CommonHeader,
@@ -91,22 +90,21 @@ export default{
             this.actualPayment = total
         },
         async getUserAddress(){
-            const userAddress = LocalStorage.getItem('address') || {}
-            if(Object.keys(userAddress).length > 0){
-                this.address = userAddress
-				// console.log(this.address)
+            const defaultAddress = LocalStorage.getItem('address') || {}
+            if(Object.keys(defaultAddress).length > 0){
+                this.address = defaultAddress
                 return
             }
+			const token = Token.getToken()
             const address = await this.axios.get('shose/address/default',{
                 headers:{
-                    token: USER_TOKEN
+                    token
                 },
                 params: {
                     id: this.addressId
                 }
             })
             this.address = address || {}
-			console.log(address)
             LocalStorage.setItem('address',this.address)
         },
         async getUserCoupon(){
@@ -115,9 +113,10 @@ export default{
                 this.coupon = userCoupon.filter(item => item.is_use === 0 && item.expires_time*1000 > Date.now())
                 return
             }
+			const token = Token.getToken()
             const coupon = await this.axios.get('shose/coupon/get',{
                 headers: {
-                    token: USER_TOKEN
+                    token
                 }
             }).then(res => res.coupon.map(item => {
                 item.selected = false
@@ -147,7 +146,7 @@ export default{
 			})
         },
         async submitOrder(){
-			const token = USER_TOKEN
+			const token = Token.getToken()
 			if(token === ''){
 				this.$router.push('./login?url=' + encodeURIComponent('/order'))
 			}
