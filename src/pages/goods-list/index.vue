@@ -92,7 +92,6 @@
 			sortGoodsList(sortField){
 				this.sortField = sortField
 				this.resetData()
-				this.loadMore()
 			},
 			async getGoodsList(){
 				this.$showLoading()

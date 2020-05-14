@@ -7,6 +7,9 @@ import User from "@/pages/user/index";
 import UserAddress from "@/pages/user-address/index";
 import UserInfo from "@/pages/user-info/index";
 import UserCoupon from "@/pages/user-coupon/index";
+import UserSign from "@/pages/user-sign/index";
+import UserTrack from "@/pages/user-track/index";
+import UserNotice from "@/pages/user-notice/index";
 import AddAddress from "@/pages/add-address/index";
 import GoodsList from "@/pages/goods-list/index";
 import GoodsDetail from "@/pages/goods-detail/index";
@@ -49,6 +52,16 @@ const routes = [
     component: UserAddress
   },
   {
+    path: "/user/sign",
+    name: "UserSign",
+    component: UserSign
+  },
+  {
+    path: "/user/notice",
+    name: "UserNotice",
+    component: UserNotice
+  },
+  {
     path: "/user/info",
     name: "UserInfo",
     component: UserInfo
@@ -57,6 +70,11 @@ const routes = [
     path: "/user/coupon",
     name: "UserCoupon",
     component: UserCoupon
+  },
+  {
+    path: "/user/track",
+    name: "UserTrack",
+    component: UserTrack
   },
   {
     path: "/user/add-address",

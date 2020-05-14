@@ -42,12 +42,12 @@
 	</div>
 	<div class="navigate-wrapper">
 		<div class="navigate">
-			<div class="navigate-cell border-bottom">
+			<div class="navigate-cell border-bottom" @click="$router.push('/user/notice')">
 				<span class="iconfont icon">&#xe6a5;</span>
 				<div class="navigate-text">我的消息</div>
 				<span class="iconfont">&#xe636;</span>
 			</div>
-			<div class="navigate-cell border-bottom">
+			<div class="navigate-cell border-bottom" @click="$router.push('/user/collect')">
 				<span class="iconfont icon">&#xe63d;</span>
 				<div class="navigate-text">我的收藏</div>
 				<span class="iconfont">&#xe636;</span>
@@ -57,7 +57,7 @@
 				<div class="navigate-text">我的地址</div>
 				<span class="iconfont">&#xe636;</span>
 			</div>
-			<div class="navigate-cell border-bottom">
+			<div class="navigate-cell border-bottom" @click="$router.push('/user/track')">
 				<span class="iconfont icon">&#xe610;</span>
 				<div class="navigate-text">我的足迹</div>
 				<span class="iconfont">&#xe636;</span>

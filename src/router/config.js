@@ -4,11 +4,15 @@ const AUTH_ROUTE_NAME = [
   'User', 
   'UserInfo', 
   'UserCoupon', 
+  'UserOrder',
   'UserSign', 
-  'UserAddress', 
-  'UserFootprint', 
-  'AddAddress', 
-  'OrderAddress', 
+  'UserAddress',
+  'UserNotice',
+  'UserTrack', 
+  'UserCollect',
+  'AddAddress',
+  'OrderAddress',
+  'OrderDetail',
   'OrderPay']
 export default {
   authRoute: AUTH_ROUTE_NAME
