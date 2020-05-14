@@ -94,6 +94,7 @@ export default{
 		this.getGoods()
 		this.initScroll()
 		this.initCollect()	
+		this.setHistory()
 	},
 	methods:{
 		async initCollect(){
@@ -102,7 +103,7 @@ export default{
 				this.isCollect = false
 				return 
 			}
-			await this.axios.get('shose/collect/check',{
+			this.axios.get('shose/collect/check',{
 				params:{
 					goods_id: this.id
 				},
@@ -112,6 +113,16 @@ export default{
 			}).then(res => {
 				this.isCollect = res.collect === 1
 			})
+		},
+		async setHistory(){
+			const token = Token.getToken()
+			if(token !== '' && this.id > 0){
+				this.axios.post('shose/history/set',{goods_id: this.id},{
+					hearders: {
+						token
+					}
+				})
+			}
 		},
 		async collect(){
 			// 判断是否登录

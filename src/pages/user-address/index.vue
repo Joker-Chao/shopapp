@@ -1,6 +1,6 @@
 <template>
 <div class="page">
-    <common-header title="我的地址" :back="backUrl"></common-header>
+    <common-header title="我的地址" back="/user"></common-header>
 	<div class="address-list">
 		<div class="address-item" v-for="item of address" :key="item.key">
 			<div class="address-info">
@@ -38,14 +38,8 @@ export default {
     components: {
         CommonHeader
     },
-    beforeRouteEnter (to, from, next) {
-		next(vm => {
-			vm.backUrl = to.query.url || from.path
-		})
-    },
     data () {
         return {
-            backUrl: '',
             address: [],
             showAddAddress: true,
         }
