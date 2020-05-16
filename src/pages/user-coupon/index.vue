@@ -64,7 +64,6 @@ export default{
 				item.status = status
 				return item
 			})
-			console.log(this.coupon,this.couponOne,this.couponTwo,this.couponThree)
 		}
 	}
 }

@@ -109,7 +109,6 @@ export default{
 			this.$router.push('/user/order?status=' + status)
 		},
 		chooseAvatar(e){
-			console.log(e)
 			if(e.target.files.length > 0){
 				const file = e.target.files[0]
 				const allowType = ['image/jpeg','image/gif','image/png','image/jpg','image/webp']
