@@ -60,13 +60,18 @@
 			const footerHeight = document.querySelector('.footer-container').offsetHeight;
 			this.$refs.page.style.paddingBottom = footerHeight +'px'
 			this.scrollDistance = footerHeight;
-			this.$showLoading();
-			await this.getSwiper();
-			await this.getIconNav();
-			await this.getRecommend();
-			await this.getSales();
-			await this.getNewGoods();
-			this.$hideLoading();
+			this.$showLoading()
+			try{
+			  await this.getSwiper()
+			  await this.getIconNav()
+			  await this.getRecommend()
+			  await this.getSales()
+			  await this.getNewGoods()
+			} catch (err) {
+			  console.log(err)
+			} finally {
+			  this.$hideLoading()
+			}
 		},
 		methods:{
 			async getSwiper(){

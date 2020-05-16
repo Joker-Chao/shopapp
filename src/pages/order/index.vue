@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <common-header title="确认订单" back="/cart"></common-header>
+    <common-header title="确认订单" :back="backUrl"></common-header>
     <order-address :address="address"></order-address>
     <div class="cart-container">
       <div class="cart-item" v-for="item of cart" :key="item.id">
@@ -51,30 +51,47 @@ export default{
             selectCouponId: 0,
             total: 0,
             cartNum: 0,
-            actualPayment: 0
+            actualPayment: 0,
+			isQuikBuy: 0,
+			backUrl: ''
         }
     },
-    mounted(){
-        this.addressId = this.$route.query.selectAddressId || 0
-        this.initCart()
-        this.$showLoading()
-        Promise.all([this.getUserAddress(),this.getUserCoupon()]).finally(() => {
-            this.$hideLoading()
-        })
+	beforeRouteEnter(to, from, next){
+		next(vm => {
+			vm.backUrl = from.path
+		})
+	},
+	beforeRouteLeave(to,from,next){
+		if(this.isQuikBuy === 1){
+			this.$store.dispatch('setBuyCart',null)
+		}
+		next()
+	},
+    mounted () {
+		console.log(this.$store.state.buyCart)
+		this.addressId = parseInt(this.$route.query.selectAddressId) || 0
+		this.initCart()
+		this.$showLoading()
+		Promise.all([this.getUserAddress(), this.getUserCoupon()]).finally(() => {
+			this.$hideLoading()
+		})  
     },
     methods:{
         initCart(){
-            const cartAll = LocalStorage.getItem('cart')
-            let total = 0
-            let cartNum = 0
-            let cart = []
-            cartAll.map(item => {
-                if(item.selected){
-                    total += item.buyNumber * item.price
-                    cartNum++
-                    cart.push(item)
-                }
-            })
+			// 是否是立即购买
+			this.isQuikBuy = parseInt(this.$route.query.buy || 0)
+			let total = 0
+			let cartNum = 0
+			let cart = []
+			if(this.isQuikBuy === 1){
+				const buyCart = this.$store.state.buyCart
+				if(Object.keys(buyCart).length > 0){
+					cart.push(buyCart)
+				}
+			}else{
+				let cartAll = LocalStorage.getItem('cart')
+				cart = cartAll.filter(item => item.selected)
+			}
             if(cart.length === 0){
                 this.$showToast({
                     message: '至少选择一个商品',
@@ -84,6 +101,10 @@ export default{
                 }) 
                 return
             }
+			cart.forEach(item => {
+				total += item.buyNumber * item.price
+				cartNum++
+			})
             this.cart = cart
             this.total = total
             this.cartNum = cartNum
@@ -187,16 +208,20 @@ export default{
 					}
 				})
 				if(res.pass){
-					// 删除购物车中购买成功的商品
-					const cartAll = LocalStorage.getItem('cart')
-					const cart = cartAll.filter(item => {
-						const index = this.cart.findIndex(val => item.id === val.id)
-						return index === -1
-					})
-					if(cart.length > 0){
-						LocalStorage.setItem('cart',cart)
-					}else{
-						LocalStorage.deleteItem('cart')
+					if (this.this.isQuikBuy === 1) {
+					  this.$store.dispatch('setBuyCart', null)
+					} else {
+						// 删除购物车中购买成功的商品
+						const cartAll = LocalStorage.getItem('cart')
+						const cart = cartAll.filter(item => {
+							const index = this.cart.findIndex(val => item.id === val.id)
+							return index === -1
+						})
+						if(cart.length > 0){
+							LocalStorage.setItem('cart',cart)
+						}else{
+							LocalStorage.deleteItem('cart')
+						}
 					}
 					 // 清空优惠券信息
 					 LocalStorage.deleteItem('userCoupon')

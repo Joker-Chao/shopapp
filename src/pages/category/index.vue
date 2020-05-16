@@ -3,7 +3,7 @@
 		<comment-header :title="'分类'" :back="backUrl"></comment-header>
 		<search-bar></search-bar>
 		<div class="content">
-			<div class="content-left">
+			<div class="content-left" ref="contentLeft">
 				<category :category="category" @change="loadSubCatgory"></category>
 			</div>
 			<div class="content-right">
@@ -42,6 +42,10 @@
 			})
 		},
 		mounted(){
+			const bodyHeight = document.documentElement.offsetHeight
+			const header = document.getElementById('header').offsetHeight
+			const search = document.getElementById('search').offsetHeight
+			this.$refs.contentLeft.style.height = (bodyHeight -header - search) + 'px' 
 			this.getCategory()
 		},
 		methods:{
@@ -78,10 +82,10 @@
 .content{
   width: 100%;
   height: 100%;
-  @include layout-flex;
+  @include layout-flex($align: flex-start);
   .content-left{
     width: 2rem;
-    height: 100%;
+	height: 100%;
     background-color: $color-bg;
   }
   .content-right{

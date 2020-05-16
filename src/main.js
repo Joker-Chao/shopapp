@@ -21,7 +21,7 @@ axios.interceptors.response.use(
     if (res.error_code === 0) {
       return res.data || "";
     } else {
-      return Promise.reject(new Error(res.error_mas || "获取失败"));
+      return Promise.reject(new Error(res.error_msg || "获取失败"));
     }
   },
   error => {
@@ -40,8 +40,8 @@ Vue.use(Toast);
 Vue.use(AwesomePicker);
 //图片加载
 Vue.use(VueLazyload, {
-  loading: "/images/loading-avg/loading-bars.svg"
-});
+  loading: '/images/loading-svg/loading-bars.svg'
+})
 
 Vue.config.productionTip = false;
 

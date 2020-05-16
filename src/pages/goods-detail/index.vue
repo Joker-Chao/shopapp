@@ -27,23 +27,23 @@
 		</div>
 	</div>
 	<div class="footer border-top">
-    <div class="footer-left">
-    	<div class="footer-cell" @click="$router.push('/')">
-        	<span class="iconfont">&#xe606;</span> 
-        	店铺
-      	</div>
-      	<div class="footer-cell">
-        	<span class="iconfont">&#xe602;</span>
-        	客服
-      	</div>
-      	<div class="footer-cell" :class="{collect: isCollect}" @click="collect">
-        	<span class="iconfont">{{isCollect?'&#xe62b;':'&#xe63d;'}}</span>
-        	{{isCollect?'已收藏':'收藏'}}
-      	</div>
+		<div class="footer-left">
+			<div class="footer-cell" @click="$router.push('/')">
+				<span class="iconfont">&#xe606;</span> 
+				店铺
+			</div>
+			<a :href="qqHref" target="_blank" class="footer-cell">
+				<span class="iconfont">&#xe602;</span>
+				客服
+			</a>
+			<div class="footer-cell" :class="{collect: isCollect}" @click="collect">
+				<span class="iconfont">{{isCollect?'&#xe62b;':'&#xe63d;'}}</span>
+				{{isCollect?'已收藏':'收藏'}}
+			</div>
     	</div>
     	<div class="footer-right">
       		<div class="cart" @click="addToCart">加入购物车</div>
-			<router-link tag="div" :to="`/order?loginRedirect=${encodeURIComponent('/goods-detail')}&id=${id}`" class="buy">立即购买</router-link>
+			<div class="buy" @click="toBuy">立即购买</div>
     	</div>
   	</div>
 </div>
@@ -57,7 +57,7 @@ import DetailInfo from "./Info"
 import DetailComment from "./Comment"
 import { Token } from '@/utils/token'
 import { LocalStorage } from '@/utils/storage'
-
+import { getConfig } from '@/utils/function'
 export default{
 	props:{
 		id: Number
@@ -87,16 +87,39 @@ export default{
 				// 当 probeType 为 1 的时候，会非实时（屏幕滑动超过一定时间后）派发scroll 事件；当 probeType 为 2 的时候，会在屏幕滑动的过程中实时的派发 scroll 事件；当 probeType 为 3 的时候，不仅在屏幕滑动的过程中，而且在 momentum 滚动动画运行过程中实时派发 scroll 事件。如果没有设置该值，其默认值为 0，即不派发 scroll 事件。
 				probeType: 3,
 				scrollbar: false
-			}
+			},
+			qqHref: ''
 		}
 	},
 	mounted(){
+		const qqConfig = getConfig('qq')
+		if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || /(Android)/i.test(navigator.userAgent)){
+			this.qqHref = qqConfig['mobileUrl'].replace('%s',qqConfig['service'])
+		}else{
+			this.qqHref = qqConfig['pcUrl'].replace('%s',qqConfig['service'])
+		}
 		this.getGoods()
 		this.initScroll()
 		this.initCollect()	
 		this.setHistory()
 	},
 	methods:{
+		toBuy(){
+			if(this.id === 0){
+				return
+			}
+			const goods = this.goods
+			const cartData = {
+				id: goods.goods_id,
+				img: goods.goods_img,
+				name: goods.goods_name,
+				price: goods.goods_price,
+				selected: true,
+				buyNumber: 1
+			}
+			this.$store.dispatch('setBuyCart',cartData)
+			this.$router.push('/order?buy=1')
+		},
 		async initCollect(){
 			const token = Token.getToken()
 			if(token === ''){
@@ -118,7 +141,7 @@ export default{
 			const token = Token.getToken()
 			if(token !== '' && this.id > 0){
 				this.axios.post('shose/history/set',{goods_id: this.id},{
-					hearders: {
+					headers: {
 						token
 					}
 				})
@@ -282,6 +305,7 @@ export default{
 		color: $color-nine; 
 		.footer-cell{
 		width: 33.33%;
+		display: block;
 		@include layout-flex(column);
 		font-size: .24rem;
 		.iconfont{

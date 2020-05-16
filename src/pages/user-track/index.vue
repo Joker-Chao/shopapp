@@ -15,10 +15,10 @@
 		<div v-for="(item,index) of history" :key="index" class="history-item">
 			<div class="title">{{item.time}}</div>
 			<div class="goods-list">
-				<div class="goods-cell" v-for="val of item.goods" :key="val.id">
-					<img :src="val.img"/>
+				<router-link tag="div" :to="`/goods-detail/${val.id}`" class="goods-cell" v-for="val of item.goods" :key="val.id">
+					<img v-lazy="val.img"/>
 					<span class="goods-price">￥{{val.price|formatPrice}}</span>
-				</div>
+				</router-link>
 			</div>
 		</div>
 	</div>
@@ -33,10 +33,10 @@ import {dateFormat} from '@/utils/function'
 import {filters} from '@/utils/mixins'
 export default {
 	directives: {infiniteScroll},
-	minixs:[filters],
 	components: {
 		CommonHeader
 	},
+	mixins:[filters],
 	data () {
 		return {
 			historyDays: [],
@@ -110,6 +110,7 @@ export default {
 		},
 		async loadHistory(){
 			this.busy = true
+			this.$showLoading()
 			if (this.hasMore) {
 				const token = Token.getToken()
 				const res = await this.axios.get('shose/history/get', { 
@@ -121,7 +122,6 @@ export default {
 						token
 					}
 				})
-				console.log(res)
 				this.page = res.page + 1
 				if(res.list.length > 0){
 					this.list = this.list.concat(res.list)
@@ -130,6 +130,7 @@ export default {
 					this.hasMore = false
 				}
 			}
+			this.$hideLoading()
 		}
 	}
 }
@@ -235,7 +236,7 @@ export default {
 				.goods-price{
 					width: 100%;
 					height: .6rem;
-					text-indent: .3rem;
+					text-indent: .3em;
 					line-height: .6rem;
 					color: $color-global;
 					font-size: .28rem;

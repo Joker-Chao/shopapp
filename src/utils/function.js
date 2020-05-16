@@ -63,10 +63,25 @@ const validate = function(data, validateObject) {
 };
 
 const getOrderStatus = function(status) {
-  const {
-    order: { status: statusOptions }
-  } = config;
+  const statusOptions = getConfig("order.status");
   return statusOptions[status] || "";
 };
 
-export { formatPrice, stopPropagation, dateFormat, validate, getOrderStatus };
+const getConfig = function(name, arr = config) {
+  if (name.includes(".")) {
+    const k1 = name.slice(0, name.indexOf("."));
+    const s1 = name.slice(name.indexOf(".") + 1);
+    return getConfig(s1, arr[k1]);
+  } else {
+    return arr[name];
+  }
+};
+
+export {
+  getConfig,
+  formatPrice,
+  stopPropagation,
+  dateFormat,
+  validate,
+  getOrderStatus
+};

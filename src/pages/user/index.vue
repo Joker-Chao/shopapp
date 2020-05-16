@@ -15,24 +15,24 @@
 		</div>
 		<div class="order-menu-wrapper">
 			<div class="order-menu">
-				<router-link to="/user" class="title">
+				<div @click="toUserOrder()" class="title">
 					我的订单{{$store.state.a}}   
 					<div class="iconfont">查看更多 &#xe636;</div>
-				</router-link>
+				</div>
 				<div class="menu-list">
-					<div class="menu-cell">
+					<div class="menu-cell" @click="toUserOrder(1)">
 						<span class="iconfont">&#xe604;</span>
 						待付款
 					</div>
-					<div class="menu-cell">
+					<div class="menu-cell" @click="toUserOrder(2)">
 						<span class="iconfont">&#xe612;</span>
 						待发货
 					</div>
-					<div class="menu-cell">
+					<div class="menu-cell" @click="toUserOrder(3)">
 						<span class="iconfont order-icon">&#xe658;</span>
 						待收货
 					</div>
-					<div class="menu-cell">
+					<div class="menu-cell" @click="toUserOrder(4)">
 						<span class="iconfont">&#xe738;</span>
 						已完成
 					</div>
@@ -67,7 +67,7 @@
 				<div class="navigate-text">我的卡券</div>
 				<span class="iconfont">&#xe636;</span>
 			</div>
-			<div class="navigate-cell border-bottom">
+			<div class="navigate-cell border-bottom" @click="$router.push('/user/points')">
 				<span class="iconfont icon">&#xe656;</span>
 				<div class="navigate-text">我的积分</div>
 				<span class="iconfont">&#xe636;</span>
@@ -105,6 +105,9 @@ export default{
 	},
 	methods: {
 		...mapActions(['getUser']),
+		toUserOrder(status = -1){
+			this.$router.push('/user/order?status=' + status)
+		},
 		chooseAvatar(e){
 			console.log(e)
 			if(e.target.files.length > 0){
