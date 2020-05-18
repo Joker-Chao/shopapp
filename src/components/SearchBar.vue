@@ -1,6 +1,6 @@
 <template>
 	<div id="search">
-		<div class="search-warp">
+		<div class="search-warp" @click="$router.push('/search')">
 			<span class="iconfont search-icon">&#xe600;</span>
 			<span class="search-name">{{placeHolder}}</span>
 		</div>

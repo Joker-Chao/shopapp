@@ -21,6 +21,16 @@ const routes = [
     component: () => import("@/pages/user/index")
   },
   {
+    path: "/search",
+    name: "Search",
+    component: () => import("@/pages/search/index")
+  },
+  {
+    path: "/searchlist",
+    name: "SearchList",
+    component: () => import("@/pages/search-list/index")
+  },
+  {
     path: "/user/order",
     name: "UserOrder",
     component: () => import("@/pages/user-order/index")
