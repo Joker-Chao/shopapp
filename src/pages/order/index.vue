@@ -184,7 +184,6 @@ export default{
 				})
 				return
 			}
-			
 			const data = {}
 			data.address_id = parseInt(address.id)
 			data.goods = []
@@ -208,7 +207,7 @@ export default{
 					}
 				})
 				if(res.pass){
-					if (this.this.isQuikBuy === 1) {
+					if (this.isQuikBuy === 1) {
 					  this.$store.dispatch('setBuyCart', null)
 					} else {
 						// 删除购物车中购买成功的商品
@@ -223,11 +222,11 @@ export default{
 							LocalStorage.deleteItem('cart')
 						}
 					}
-					 // 清空优惠券信息
-					 LocalStorage.deleteItem('userCoupon')
-					 this.$router.replace('/order/pay?id=' + res.order_id)
+					// 清空优惠券信息
+					LocalStorage.deleteItem('userCoupon')
+					this.$router.replace('/order/pay?id=' + res.order_id)
 				}
-			} catch(error){
+			}catch(error){
 				this.$showToast({
 					message: error.message,
 					callback: () => {

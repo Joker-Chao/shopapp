@@ -42,15 +42,15 @@ export default{
 					token
 				}
 			}).then(res => res.coupon)
-			const statusOptions = ['','优惠抵扣','已经使用','已经失效']
+			const statusOptions = ['','优惠抵扣','已经使用','已经过期']
 			this.coupon = coupon.map(item => {
 				let status = 0
 				if(item.is_use === 1){
-					status = 3
+					status = 2
 					this.couponThree.unshift(item)
 				}else{
 					if(Date.now() > item.expires_time * 1000){
-						status = 2
+						status = 3
 						this.couponTwo.unshift(item)
 					}else{
 						status = 1

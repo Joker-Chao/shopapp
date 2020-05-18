@@ -72,7 +72,7 @@
 				<div class="navigate-text">我的积分</div>
 				<span class="iconfont">&#xe636;</span>
 			</div>
-			<div class="navigate-cell border-bottom">
+			<div class="navigate-cell border-bottom" @click="logout">
 				<span class="iconfont icon">&#xe62e;</span>
 				<div class="navigate-text">退出系统</div>
 				<span class="iconfont">&#xe636;</span>
@@ -145,6 +145,10 @@ export default{
 					this.$hideLoading()
 				})
 			} 
+		},
+		logout(){
+			Token.deleteToken()
+			this.$router.replace('/')
 		}
 	}
 }  

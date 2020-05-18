@@ -71,7 +71,7 @@ export default {
 			const {list, total} = await this.axios.get('shose/user/points',{
 				params: {
 					page: this.page,
-					count: this.page,
+					count: this.count,
 					type: this.status
 				},
 				headers: {
