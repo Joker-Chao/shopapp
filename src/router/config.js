@@ -1,6 +1,5 @@
 const AUTH_ROUTE_NAME = [
   "Coupon",
-  "Order",
   "User",
   "UserInfo",
   "UserCoupon",
@@ -12,6 +11,7 @@ const AUTH_ROUTE_NAME = [
   "UserNotice",
   "UserPoints",
   "AddAddress",
+  "Order",
   "OrderAddress",
   "OrderDetail",
   "OrderPay"

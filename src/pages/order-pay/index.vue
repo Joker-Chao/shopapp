@@ -81,6 +81,7 @@ export default{
 	},
 	methods:{
 		async getOrder(){
+			this.$showLoading()
 			const token = Token.getToken()
 			const order = await this.axios.get('shose/order',{
 				params: {
@@ -93,6 +94,7 @@ export default{
 			order.statusInfo = getOrderStatus(order.status)
 			order.orderTotal = formatPrice(order.total_price)
 			this.order = order
+			this.$hideLoading()
 		}
 	}
 }  

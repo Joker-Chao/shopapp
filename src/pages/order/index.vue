@@ -68,7 +68,6 @@ export default{
 		next()
 	},
     mounted () {
-		console.log(this.$store.state.buyCart)
 		this.addressId = parseInt(this.$route.query.selectAddressId) || 0
 		this.initCart()
 		this.$showLoading()
@@ -223,7 +222,14 @@ export default{
 						}
 					}
 					// 清空优惠券信息
-					LocalStorage.deleteItem('userCoupon')
+					let userCoupon = LocalStorage.getItem('userCoupon') || []
+					const index = userCoupon.findIndex(item => item.id === this.coupon.id)
+					if(index > 0){
+						userCoupon = userCoupon.splice(index,1)
+						LocalStorage.setItem('userCoupon',userCoupon)
+					}else{
+						LocalStorage.deleteItem('userCoupon')
+					}
 					this.$router.replace('/order/pay?id=' + res.order_id)
 				}
 			}catch(error){

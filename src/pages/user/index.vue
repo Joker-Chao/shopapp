@@ -147,8 +147,15 @@ export default{
 			} 
 		},
 		logout(){
-			Token.deleteToken()
-			this.$router.replace('/')
+			this.$showModel({
+				content: '确定要退出登录吗',
+				success: res => {
+					if(res.confirm === true){
+						Token.deleteToken()
+						this.$router.replace('/')
+					}
+				}
+			})
 		}
 	}
 }  

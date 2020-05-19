@@ -47,8 +47,10 @@ export default {
 			points: 30,
 		}
 	},
-	mounted(){
-		this.getUserSign()
+	async mounted(){
+		this.$showLoading()
+		await this.getUserSign()
+		this.$hideLoading()
 	},
 	watch:{
 		// userLevel: {
@@ -97,7 +99,6 @@ export default {
 			}).finally(() => this.$hideLoading())
 		},
 		async getUserSign(){
-			this.$showLoading()
 			const token = Token.getToken()
 			const res = await this.axios.get('shose/user/sign',{
 				headers: {
@@ -117,7 +118,6 @@ export default {
 			// console.log(res)
 			this.signDays = signDays
 			this.userLevel = res.user
-			this.$hideLoading()
 		}
 	}
 }

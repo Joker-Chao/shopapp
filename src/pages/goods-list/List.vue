@@ -98,9 +98,7 @@
 			padding: .2rem;
 			width: 0;
 			box-sizing: border-box;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
+			@include layout-flex(column, space-between, flex-start);
 			flex: 1;
 			position: relative;
 			.goods-title{

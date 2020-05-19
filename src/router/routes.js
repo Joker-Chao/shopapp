@@ -119,6 +119,28 @@ const routes = [
     component: () => import("@/pages/order-address/index")
   },
   {
+    path: "/order-detail",
+    redirect: "/"
+  },
+  {
+    path: "/order-detail/:id",
+    name: "OrderDetail",
+	beforeEnter(to, from, next) {
+	  const id = to.params.id;
+	  if (!/^\d+$/.test(id)) {
+	    next(from.path);
+	  } else {
+	    next();
+	  }
+	},
+	props: route => {
+	  return {
+	    id: parseInt(route.params.id)
+	  };
+	},
+    component: () => import("@/pages/order-detail/index")
+  },
+  {
     path: "/goods-list",
     name: "GoodsList",
     props: route => {
