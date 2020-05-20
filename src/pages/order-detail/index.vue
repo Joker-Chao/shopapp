@@ -202,6 +202,9 @@ export default{
 			height: 1.8rem;
 			@include layout-flex;
 			margin-bottom: .2rem;
+			&:last-child{
+				margin-bottom: 0;
+			}
 			.cart-img{
 				width: 1.8rem;
 				height: 1.8rem;
@@ -228,6 +231,8 @@ export default{
 	.order-count{
 		width: 100%;
 		margin-top: .6rem;
+		padding: 0 .2rem;
+		box-sizing: border-box;
 		.row{
 			width: 100%;
 			height: .4rem;

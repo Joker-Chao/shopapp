@@ -223,11 +223,12 @@ export default{
 					}
 					// 清空优惠券信息
 					let userCoupon = LocalStorage.getItem('userCoupon') || []
-					const index = userCoupon.findIndex(item => item.id === this.coupon.id)
-					if(index > 0){
-						userCoupon = userCoupon.splice(index,1)
+					const index = userCoupon.findIndex(item => item.id === this.selectCouponId)
+					if(index > -1){
+						userCoupon.splice(index,1)
 						LocalStorage.setItem('userCoupon',userCoupon)
 					}else{
+						console.log(222)
 						LocalStorage.deleteItem('userCoupon')
 					}
 					this.$router.replace('/order/pay?id=' + res.order_id)

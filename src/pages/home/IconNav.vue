@@ -13,9 +13,12 @@
 			navList: Array
 		},
 		watch: {
-			navList(newList){
-				// console.log(newList instanceof Array)
-				this.list = newList.slice(2,10);
+			navList (newList){
+				if(newList.length > 8){
+					this.list = newList.slice(-8)
+				}else{
+					this.list = newList
+				}
 			}
 		},
 		data() {

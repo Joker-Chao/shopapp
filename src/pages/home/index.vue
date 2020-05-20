@@ -79,12 +79,12 @@
 			async loadData(){
 				this.$showLoading()
 				try{
-				  await this.getSwiper()
-				  await this.getIconNav()
-				  await this.getRecommend()
-				  await this.getSales()
-				  await this.getNewGoods()
-				  await this.getGoodsList()
+					await this.getSwiper()
+					await this.getIconNav()
+					await this.getRecommend()
+					await this.getSales()
+					await this.getNewGoods()
+					await this.getGoodsList()
 				} catch (err) {
 				  console.log(err)
 				} finally {
