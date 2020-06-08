@@ -9,7 +9,7 @@ module.exports = {
     inline: true,
     proxy: {
       "/api": {
-        target: "http://api.2yue.cc/index.php/",
+        target: "http://api.4yue.top/index.php/",
         changeOrigin: true,
         pathRewrite: {
           "^/api": ""
