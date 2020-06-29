@@ -17,7 +17,9 @@ module.exports = {
       }
     }
   },
-  publicPath: "/",
+  publicPath: "/shose",
+  outputDir: "shose",
+  assetsDir: "static",
   productionSourceMap: false,
   chainWebpack: config => {
     config.plugins.delete("prefetch");

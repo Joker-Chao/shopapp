@@ -39,21 +39,21 @@
 	margin-top: .2rem;
 	@include layout-flex;
 	&.status-bg1{
-		background: url(/images/card_stock-01.png);
+		background: url(../../assets/images/card_stock-01.png);
 		background-size: contain;
 		.coupon-status{
 		  color: #ff5e46;
 		}
 	}
 	&.status-bg2{
-		background: url(/images/card_stock-02.png);
+		background: url(../../assets/images/card_stock-02.png);
 		background-size: contain;
 		.coupon-status{
 		  color: #ff7c76;
 		}
 	}
 	&.status-bg3{
-		background: url(/images/card_stock-03.png);
+		background: url(../../assets/images/card_stock-03.png);
 		background-size: contain;
 		.coupon-status{
 		  color: #999999;

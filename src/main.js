@@ -10,7 +10,7 @@ import Loading from "./plugin/loading";
 import Model from "./plugin/model";
 import Toast from "./plugin/toast";
 
-axios.defaults.baseURL = "/api/";
+axios.defaults.baseURL = "http://api.4yue.top/index.php/";
 axios.defaults.timeout = 10000;
 axios.defaults.headers.appkey =
   "f68bSYqte0m6EibwhARrzTcYDPoV0FobCi06uDfM3eF4QGQQKSywmd71ytM";
