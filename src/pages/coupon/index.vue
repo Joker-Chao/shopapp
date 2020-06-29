@@ -181,7 +181,7 @@ export default{
             .coupon-money{
                 width: 2.3rem;
                 height: 100%;
-                background-image: url("/images/exchange.png");
+                background-image: url("../../assets/images/exchange.png");
 				background-size: contain;
 				background-repeat: no-repeat;
                 color: $color-white;

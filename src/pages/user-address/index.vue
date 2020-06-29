@@ -204,12 +204,12 @@ export default {
 	-moz-appearance: none;
 	width: .3rem;
 	height: .3rem;
-	background: url(/images/checkbox.png) no-repeat;
+	background: url(../../assets/images/checkbox.png) no-repeat;
 	outline: none;
 	background-size: contain;
 }
 .checkbox:checked{
-	background: url(/images/checkbox@selected.png) no-repeat left bottom;
+	background: url(../../assets/images/checkbox@selected.png) no-repeat left bottom;
 	background-size: contain;
 }
 </style>

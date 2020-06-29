@@ -183,12 +183,12 @@ export default{
   -moz-appearance: none;
   width: .3rem;
   height: .3rem;
-  background: url(/images/radio.png) no-repeat;
+  background: url(../../assets/images/radio.png) no-repeat;
   outline: none;
   background-size: contain;
 }
 .radio:checked{
-  background: url(/images/radio@checked.png) no-repeat left bottom;
+  background: url(../../assets/images/radio@checked.png) no-repeat left bottom;
   background-size: contain;
 }
 </style>
