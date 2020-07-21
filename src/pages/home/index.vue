@@ -13,6 +13,7 @@
 		</div>
 	</div>
 	<comment-footer ref="footer"></comment-footer>
+	
 </div>
 </template>
 
@@ -146,7 +147,9 @@
 				}
 			},
 			async getRecommend(){
-				this.recommendList = await this.axios.get('api/goods/recommend?type=1');
+				let recommendList = await this.axios.get('api/goods/recommend?type=1');
+				recommendList.splice(0,3);
+				this.recommendList = recommendList
 			},
 			async getSales(){
 				this.salesList = await this.axios.get('api/goods/sales?type=1');
