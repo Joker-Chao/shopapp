@@ -352,11 +352,11 @@ export default {
       width: 0.3rem;
       height: 0.3rem;
       margin-right: 0.1rem;
-      background: url(/images/checkbox.png) no-repeat;
+      background: url(../../assets/images/checkbox.png) no-repeat;
       outline: none;
       background-size: contain;
       &:checked {
-        background: url(/images/checkbox@selected.png) no-repeat left bottom;
+        background: url(../../assets/images/checkbox@selected.png) no-repeat left bottom;
         background-size: contain;
       }
     }
